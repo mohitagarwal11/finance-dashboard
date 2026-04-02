@@ -20,6 +20,22 @@ function App() {
     type: "all",
   });
 
+  // crud operation handlers
+  const handleAddTxn = (newTxn) => {
+    setTransactions((prev) => [newTxn, ...prev]);
+    console.log("New Transaction Added:", newTxn);
+  }
+
+  const handleDeleteTxn = (txnId) => {
+    setTransactions((prev) => prev.filter(txn => txn.id !== txnId));
+    console.log("Delete Transaction button clicked for:", txnId);
+  }
+
+  const handleEditTxn = (updatedTxn) => {
+    setTransactions((prev) => prev.map(txn => txn.id == updatedTxn.id ? updatedTxn : txn));
+    console.log("Edit Transaction button clicked for:", updatedTxn.id);
+  }
+
   return (
     <>
       <header>
@@ -35,10 +51,12 @@ function App() {
 
       <TransactionsSection
         transactions={transactions}
-        setTransactions={setTransactions}
         filters={filters}
         setFilters={setFilters}
         role={role}
+        handleAddTxn={handleAddTxn}
+        handleDeleteTxn={handleDeleteTxn}
+        handleEditTxn={handleEditTxn}
       />
     </>
   );

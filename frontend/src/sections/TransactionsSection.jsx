@@ -1,24 +1,21 @@
 import TransactionItem from '../components/TransactionItem';
+import AddTransactionModal from '../components/AddTransactionModal';
+import { useState } from 'react';
 
 function TransactionsSection({
   transactions,
-  setTransactions,
   filters,
   setFilters,
   role,
+  handleAddTxn,
+  handleDeleteTxn,
+  handleEditTxn
 }) {
-  // crud operation handlers
-  function handleAddTxn() {
-    console.log("Add Transaction button clicked");
-  }
+  // to keep track of the form modal state
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  function handleDeleteTxn(id) {
-    console.log("Delete Transaction with id:", id);
-  }
-
-  function handleEditTxn(transaction) {
-    console.log("Edit Transaction:", transaction);
-  }
+  // to keep track of the txn being edited
+  const [editingTxn, setEditingTxn] = useState(null);
 
   // applying all the filters together to get the final list to render
   const filteredTransactions = transactions.filter((txn) => {
@@ -31,8 +28,9 @@ function TransactionsSection({
       filters.type == "all" || txn.type.toLowerCase() == filters.type.toLowerCase();
     return matchesSearch && matchesCategory && matchesType;
   });
-  return <>
+  return (
     <div>
+
       {/* search filter */}
       <input
         type="text"
@@ -40,6 +38,7 @@ function TransactionsSection({
         value={filters.search}
         onChange={(e) => setFilters({ ...filters, search: e.target.value })}
       />
+
       {/* category filter */}
       <select
         value={filters.category}
@@ -54,6 +53,7 @@ function TransactionsSection({
         <option value="salary">Salary</option>
         <option value="investment">Investment</option>
       </select>
+
       {/* type filter */}
       <select
         value={filters.type}
@@ -64,9 +64,23 @@ function TransactionsSection({
         <option value="expense">Expense</option>
       </select>
 
+      {/* if admin mode then we allow for add transaction to show */}
       {role === "admin" && (
-        <button onClick={handleAddTxn}>Add Transaction</button>
+        <button onClick={() => setIsModalOpen(true)}>Add Transaction</button>
       )}
+      {/* if isModalOpen true then we render the modal */}
+      {isModalOpen && (
+        <AddTransactionModal
+          onAdd={handleAddTxn}
+          onClose={() => {
+            setIsModalOpen(false);
+            setEditingTxn(null);
+          }}
+          initialData={editingTxn}
+          onEdit={handleEditTxn}
+        />
+      )
+      }
 
       <h2>Transactions</h2>
       {/* rendering on filtered list */}
@@ -75,12 +89,15 @@ function TransactionsSection({
           key={txn.id}
           transaction={txn}
           role={role}
-          onEdit={handleEditTxn}
+          onEdit={(txn) => {
+            setEditingTxn(txn);
+            setIsModalOpen(true);
+          }}
           onDelete={handleDeleteTxn}
         />
       ))}
     </div>
-  </>;
+  );
 }
 
 export default TransactionsSection;
