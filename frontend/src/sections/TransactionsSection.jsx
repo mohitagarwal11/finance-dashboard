@@ -1,5 +1,5 @@
-import TransactionItem from '../components/TransactionItem';
-import AddTransactionModal from '../components/AddTransactionModal';
+import TransactionItem from '../components/TransactionItem/TransactionItem';
+import AddTransactionModal from '../components/AddTransactionModal/AddTransactionModal';
 import { useState } from 'react';
 
 function TransactionsSection({
@@ -29,8 +29,7 @@ function TransactionsSection({
     return matchesSearch && matchesCategory && matchesType;
   });
   return (
-    <div>
-
+    <div className="transactions-section">
       {/* search filter */}
       <input
         type="text"

@@ -1,9 +1,11 @@
+import "./TransactionItem.css"
+
 function TransactionItem({ transaction, role, onEdit, onDelete }) {
   const { title, amount, type, category, date } = transaction;
   return (
-    <div>
+    <div className="transaction-item">
       <h3>{title}</h3>
-      <p>Amount: {amount}</p>
+      <p>Amount: ₹{amount}</p>
       <p>Type: {type}</p>
       <p>Category: {category}</p>
       <p>Date: {date}</p>

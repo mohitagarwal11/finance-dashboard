@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import "./AddTransactionModal.css"
+
 function AddTransactionModal({ onAdd, onClose, initialData, onEdit }) {
   const isEditMode = Boolean(initialData);
 

@@ -7,9 +7,9 @@ import ChartsSection from "./sections/ChartsSection";
 import TransactionsSection from "./sections/TransactionsSection";
 import InsightsSection from "./sections/InsightsSection";
 
-import SummaryCard from "./components/SummaryCard";
-import RoleSwitcher from "./components/RoleSwitcher";
-import TransactionItem from "./components/TransactionItem";
+import SummaryCard from "./components/SummaryCard/SummaryCard";
+import RoleSwitcher from "./components/RoleSwitcher/RoleSwitcher";
+import TransactionItem from "./components/TransactionItem/TransactionItem";
 
 function App() {
   // if localstorage has data it parses it otherwise uses mock data from the transactions.js file
