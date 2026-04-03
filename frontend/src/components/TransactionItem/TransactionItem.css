@@ -7,7 +7,6 @@
   border: 1px solid var(--border);
   border-radius: var(--r-md);
   background: var(--surface);
-  box-shadow: var(--shadow);
 }
 
 /* ── Columns ─────────────────────────── */

@@ -59,12 +59,12 @@ function InsightsSection({ transactions, expenseLimit, setExpenseLimit, role }) 
           )}
         </div>
         <p className="insights-card__value">
-          {formatCurrency(monthlyTotals[selectedMonth] ? monthlyTotals[selectedMonth].expense : 0)} / {formatCurrency(expenseLimit)}
+          {formatCurrency(monthlyTotals[selectedMonth] ? monthlyTotals[selectedMonth].expense : 0)}
         </p>
         <p className="insights-card__caption">
           {monthlyTotals[selectedMonth] && monthlyTotals[selectedMonth].expense > expenseLimit
-            ? `You're ${percentOver}% over your monthly budget.`
-            : `Within budget, ${percentUnder}% remaining.`}
+            ? `${percentOver}% over your monthly budget of ${formatCurrency(expenseLimit)}.`
+            : `${percentUnder}% remaining off ${formatCurrency(expenseLimit)}.`}
         </p>
       </div>
 
@@ -78,7 +78,6 @@ function InsightsSection({ transactions, expenseLimit, setExpenseLimit, role }) 
           {selectedMonthData ? formatCurrency(selectedMonthData.amount) : formatCurrency(0)}
         </p>
         <p className="insights-card__caption">
-          {/* how much this alone gave away to the total expenses in that month */}
           {selectedMonthData && monthlyTotals[selectedMonth] ?
             `This accounts for ${((selectedMonthData.amount / monthlyTotals[selectedMonth].expense) * 100).toFixed(1)}% of your spendings this month.`
             : "No expenses recorded for this month."}

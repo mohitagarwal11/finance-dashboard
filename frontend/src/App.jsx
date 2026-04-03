@@ -5,9 +5,17 @@ import { initialTransactions } from "./data/transactions";
 import SummarySection from "./sections/SummarySection/SummarySection";
 import TransactionsSection from "./sections/TransactionsSection/TransactionsSection";
 import InsightsSection from "./sections/InsightsSection/InsightsSection";
-import ChartsSection from "./sections/ChartsSection/ChartsSection";
+// import ChartsSection from "./sections/ChartsSection/ChartsSection";
 
 import RoleSwitcher from "./components/RoleSwitcher/RoleSwitcher";
+
+function getInitialTheme() {
+  const storedTheme = localStorage.getItem("theme");
+
+  if (storedTheme === "light" || storedTheme === "dark") {
+    return storedTheme;
+  }
+}
 
 function App() {
   // if localstorage has data it parses it otherwise uses mock data from the transactions.js file
@@ -16,16 +24,28 @@ function App() {
     return data ? JSON.parse(data) : initialTransactions;
   });
 
-  useEffect(() => {
-    localStorage.setItem("transactions", JSON.stringify(transactions));
-  }, [transactions]);
-
-  const [role, setRole] = useState("user");
+  const [role, setRole] = useState("admin");
+  const [theme, setTheme] = useState(getInitialTheme);
   const [filters, setFilters] = useState({
     search: "",
     category: "all",
     type: "all",
   });
+
+  const [expenseLimit, setExpenseLimit] = useState(() => {
+    const data = localStorage.getItem("expenseLimit");
+    return data ? data : 3000;
+  });
+
+  useEffect(() => {
+    localStorage.setItem("transactions", JSON.stringify(transactions));
+    localStorage.setItem("expenseLimit", expenseLimit);
+  }, [transactions, expenseLimit]);
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    localStorage.setItem("theme", theme);
+  }, [theme]);
 
   // crud operation handlers
   const handleAddTxn = (newTxn) => {
@@ -57,6 +77,18 @@ function App() {
         </div>
 
         <div className="app-header__actions">
+          <button
+            className="app-theme-toggle"
+            type="button"
+            onClick={() =>
+              setTheme((currentTheme) =>
+                currentTheme === "dark" ? "light" : "dark"
+              )
+            }
+            aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+          >
+            {theme === "dark" ? "Light mode" : "Dark mode"}
+          </button>
           <RoleSwitcher role={role} setRole={setRole} />
         </div>
       </header>
@@ -64,11 +96,16 @@ function App() {
       <div className="dashboard-layout">
         <div className="dashboard-main">
           <SummarySection transactions={transactions} />
-          <ChartsSection transactions={transactions} />
+          {/* <ChartsSection transactions={transactions} /> */}
         </div>
 
         <aside className="dashboard-side">
-          <InsightsSection transactions={transactions} />
+          <InsightsSection
+            transactions={transactions}
+            expenseLimit={expenseLimit}
+            setExpenseLimit={setExpenseLimit}
+            role={role}
+          />
         </aside>
       </div>
 
