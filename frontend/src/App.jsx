@@ -2,27 +2,25 @@ import "./App.css";
 import { useEffect, useState } from "react";
 import { initialTransactions } from "./data/transactions";
 
-import SummarySection from "./sections/SummarySection";
-import ChartsSection from "./sections/ChartsSection";
-import TransactionsSection from "./sections/TransactionsSection";
-import InsightsSection from "./sections/InsightsSection";
+import SummarySection from "./sections/SummarySection/SummarySection";
+import TransactionsSection from "./sections/TransactionsSection/TransactionsSection";
+import InsightsSection from "./sections/InsightsSection/InsightsSection";
+import ChartsSection from "./sections/ChartsSection/ChartsSection";
 
-import SummaryCard from "./components/SummaryCard/SummaryCard";
 import RoleSwitcher from "./components/RoleSwitcher/RoleSwitcher";
-import TransactionItem from "./components/TransactionItem/TransactionItem";
 
 function App() {
   // if localstorage has data it parses it otherwise uses mock data from the transactions.js file
   const [transactions, setTransactions] = useState(() => {
     const data = localStorage.getItem("transactions");
     return data ? JSON.parse(data) : initialTransactions;
-  })
+  });
 
   useEffect(() => {
     localStorage.setItem("transactions", JSON.stringify(transactions));
   }, [transactions]);
 
-  const [role, setRole] = useState("admin");
+  const [role, setRole] = useState("user");
   const [filters, setFilters] = useState({
     search: "",
     category: "all",
@@ -33,30 +31,46 @@ function App() {
   const handleAddTxn = (newTxn) => {
     setTransactions((prev) => [newTxn, ...prev]);
     console.log("New Transaction Added:", newTxn);
-  }
+  };
 
   const handleDeleteTxn = (txnId) => {
-    setTransactions((prev) => prev.filter(txn => txn.id !== txnId));
+    setTransactions((prev) => prev.filter((txn) => txn.id !== txnId));
     console.log("Delete Transaction button clicked for:", txnId);
-  }
+  };
 
   const handleEditTxn = (updatedTxn) => {
-    setTransactions((prev) => prev.map(txn => txn.id == updatedTxn.id ? updatedTxn : txn));
+    setTransactions((prev) =>
+      prev.map((txn) => (txn.id == updatedTxn.id ? updatedTxn : txn))
+    );
     console.log("Edit Transaction button clicked for:", updatedTxn.id);
-  }
+  };
 
   return (
-    <>
-      <header>
-        <h1>Finance Dashboard</h1>
-        <RoleSwitcher role={role} setRole={setRole} />
+    <div className="app-shell">
+      <header className="app-header">
+        <div className="app-header__intro">
+          <div className="app-header__logo">MA</div>
+          <div className="app-header__copy">
+            <p className="app-header__eyebrow">Personal account</p>
+            <h1>Good morning, Mohit</h1>
+          </div>
+        </div>
+
+        <div className="app-header__actions">
+          <RoleSwitcher role={role} setRole={setRole} />
+        </div>
       </header>
 
-      <SummarySection transactions={transactions} />
+      <div className="dashboard-layout">
+        <div className="dashboard-main">
+          <SummarySection transactions={transactions} />
+          <ChartsSection transactions={transactions} />
+        </div>
 
-      <ChartsSection transactions={transactions} />
-
-      <InsightsSection transactions={transactions} />
+        <aside className="dashboard-side">
+          <InsightsSection transactions={transactions} />
+        </aside>
+      </div>
 
       <TransactionsSection
         transactions={transactions}
@@ -67,7 +81,7 @@ function App() {
         handleDeleteTxn={handleDeleteTxn}
         handleEditTxn={handleEditTxn}
       />
-    </>
+    </div>
   );
 }
 

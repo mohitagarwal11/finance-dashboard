@@ -1,0 +1,127 @@
+#root {
+  width: calc(100% - 150px);
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 24px 0 36px;
+}
+
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  background: var(--shell);
+  box-shadow: var(--shadow-md);
+}
+
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 4px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.app-header__intro {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.app-header__logo {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: var(--r-md);
+  background: var(--accent);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  flex-shrink: 0;
+  box-shadow: 0 2px 10px rgba(22, 163, 74, 0.32);
+}
+
+.app-header__copy {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.app-header__eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  color: var(--muted);
+}
+
+.app-header__subtitle {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.app-header h1 {
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--text);
+}
+
+.app-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dashboard-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 350px;
+  gap: 14px;
+  align-items: start;
+}
+
+.dashboard-main,
+.dashboard-side {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+@media (max-width: 1080px) {
+  .dashboard-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  #root {
+    width: calc(100% - 16px);
+    padding-top: 12px;
+    padding-bottom: 24px;
+  }
+
+  .app-shell {
+    padding: 14px;
+    border-radius: var(--r-lg);
+    gap: 12px;
+  }
+
+  .app-header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 4px 0 16px;
+  }
+
+  .app-header__actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .app-header h1 {
+    font-size: 26px;
+  }
+}
