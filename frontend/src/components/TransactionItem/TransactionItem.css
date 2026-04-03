@@ -1,0 +1,109 @@
+.transaction-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) 140px 100px 110px 120px;
+  gap: 12px;
+  align-items: center;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+/* ── Columns ─────────────────────────── */
+.transaction-item__title {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.transaction-item__title h3 {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.transaction-item__title p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.transaction-item__amount {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.transaction-item__amount--income {
+  color: var(--green-strong);
+}
+
+.transaction-item__amount--expense {
+  color: var(--danger-text);
+}
+
+.transaction-item__type {
+  font-size: 13px;
+  color: var(--muted);
+  text-transform: capitalize;
+}
+
+.transaction-item__date {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* ── Actions ─────────────────────────── */
+.transaction-item__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.transaction-item button {
+  padding: 7px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: var(--surface);
+  color: var(--green-strong);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.transaction-item button + button {
+  background: var(--danger-light);
+  border-color: var(--danger-border);
+  color: var(--danger-text);
+}
+
+/* ── Responsive ──────────────────────── */
+@media (max-width: 1024px) {
+  .transaction-item {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 10px;
+  }
+
+  .transaction-item__amount,
+  .transaction-item__type,
+  .transaction-item__date {
+    justify-self: start;
+  }
+}
+
+@media (max-width: 640px) {
+  .transaction-item {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .transaction-item__actions {
+    justify-content: flex-start;
+  }
+
+  .transaction-item button {
+    flex: 1;
+    text-align: center;
+  }
+}
