@@ -1,0 +1,59 @@
+.insights-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.insights-card {
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.insights-card--accent {
+  background: var(--green-light);
+  border-color: var(--green-border);
+}
+
+.insights-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.insights-card__eyebrow {
+  margin: 0 0 6px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  color: var(--muted);
+}
+
+.insights-card__month-select {
+  margin-left: 10px;
+  padding: 4px 8px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: var(--surface);
+  color: var(--text);
+}
+
+.insights-card h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.insights-card__value {
+  margin: 10px 0 0;
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  color: var(--green-strong);
+}
