@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import "./AddTransactionModal.css"
+import { useState, useEffect } from "react";
+import "./AddTransactionModal.css";
 
 function AddTransactionModal({ onAdd, onClose, initialData, onEdit }) {
   const isEditMode = Boolean(initialData);
@@ -9,7 +9,7 @@ function AddTransactionModal({ onAdd, onClose, initialData, onEdit }) {
     amount: "",
     type: "expense",
     category: "food",
-    date: ""
+    date: "",
   };
 
   const [form, setForm] = useState(initialData || initialState);
@@ -18,9 +18,9 @@ function AddTransactionModal({ onAdd, onClose, initialData, onEdit }) {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    setForm(prev => ({
+    setForm((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -44,7 +44,7 @@ function AddTransactionModal({ onAdd, onClose, initialData, onEdit }) {
       amount: Number(form.amount),
       type: form.type,
       category: form.category,
-      date: form.date
+      date: form.date,
     };
 
     if (initialData) {
@@ -54,7 +54,7 @@ function AddTransactionModal({ onAdd, onClose, initialData, onEdit }) {
     }
     onClose();
     setForm(initialState);
-  }
+  };
 
   // to update the form data if edit is clicked for other txn without closing the modal
   useEffect(() => {
@@ -66,56 +66,87 @@ function AddTransactionModal({ onAdd, onClose, initialData, onEdit }) {
   }, [initialData]);
 
   return (
-    <div>
-      <h2>{isEditMode ? "Edit" : "Add"} Transaction</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Title"
-          name="title"
-          value={form.title}
-          onChange={handleChange}
-        />
-        <input
-          type="number"
-          placeholder="Amount"
-          name="amount"
-          value={form.amount}
-          onChange={handleChange}
-        />
-        <select
-          name="type"
-          value={form.type}
-          onChange={handleChange}
-        >
-          <option value="income">Income</option>
-          <option value="expense">Expense</option>
-        </select>
-        <select
-          name="category"
-          value={form.category}
-          onChange={handleChange}
-        >
-          <option value="food">Food</option>
-          <option value="rent">Rent</option>
-          <option value="transportation">Transportation</option>
-          <option value="utilities">Utilities</option>
-          <option value="entertainment">Entertainment</option>
-          <option value="salary">Salary</option>
-          <option value="investment">Investment</option>
-        </select>
-        <input
-          type="date"
-          name="date"
-          value={form.date}
-          onChange={handleChange}
-        />
-        <button type="submit">{isEditMode ? "Save" : "Add"} Transaction</button>
-        <button type="button" onClick={onClose}>
-          Cancel
-        </button>
-      </form>
+    <div className="modal-backdrop">
+      <div className="modal-card">
+        <div className="modal-card__header">
+          <h2>{isEditMode ? "Edit" : "Add"} Transaction</h2>
+          <p>{isEditMode ? "Update existing entry" : "Create a new transaction"}</p>
+        </div>
+
+        <form className="modal-form" onSubmit={handleSubmit}>
+          <div className="modal-form__grid">
+            <label>
+              <span>Title</span>
+              <input
+                type="text"
+                placeholder="Title"
+                name="title"
+                value={form.title}
+                onChange={handleChange}
+              />
+            </label>
+
+            <label>
+              <span>Amount</span>
+              <input
+                type="number"
+                placeholder="Amount"
+                name="amount"
+                value={form.amount}
+                onChange={handleChange}
+              />
+            </label>
+
+            <label>
+              <span>Type</span>
+              <select
+                name="type"
+                value={form.type}
+                onChange={handleChange}
+              >
+                <option value="income">Income</option>
+                <option value="expense">Expense</option>
+              </select>
+            </label>
+
+            <label>
+              <span>Category</span>
+              <select
+                name="category"
+                value={form.category}
+                onChange={handleChange}
+              >
+                <option value="food">Food</option>
+                <option value="rent">Rent</option>
+                <option value="transportation">Transportation</option>
+                <option value="utilities">Utilities</option>
+                <option value="entertainment">Entertainment</option>
+                <option value="salary">Salary</option>
+                <option value="investment">Investment</option>
+              </select>
+            </label>
+
+            <label className="modal-form__full">
+              <span>Date</span>
+              <input
+                type="date"
+                name="date"
+                value={form.date}
+                onChange={handleChange}
+              />
+            </label>
+          </div>
+
+          <div className="modal-form__actions">
+            <button type="submit">{isEditMode ? "Save" : "Add"} Transaction</button>
+            <button type="button" onClick={onClose}>
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
-};
+}
+
 export default AddTransactionModal;
