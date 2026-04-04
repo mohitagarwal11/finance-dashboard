@@ -1,9 +1,9 @@
 .transaction-item {
   display: grid;
-  grid-template-columns: minmax(0, 1.6fr) 140px 100px 110px 120px;
-  gap: 12px;
+  grid-template-columns: minmax(0, 1.6fr) 126px 90px 99px 108px;
+  gap: 11px;
   align-items: center;
-  padding: 14px;
+  padding: 13px;
   border: 1px solid var(--border);
   border-radius: var(--r-md);
   background: var(--surface);
@@ -17,19 +17,19 @@
 }
 
 .transaction-item__title h3 {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--text);
 }
 
 .transaction-item__title p {
   margin: 0;
-  font-size: 13px;
+  font-size: 12px;
   color: var(--muted);
 }
 
 .transaction-item__amount {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   color: var(--text);
 }
@@ -43,13 +43,13 @@
 }
 
 .transaction-item__type {
-  font-size: 13px;
+  font-size: 12px;
   color: var(--muted);
   text-transform: capitalize;
 }
 
 .transaction-item__date {
-  font-size: 13px;
+  font-size: 12px;
   color: var(--muted);
 }
 
@@ -57,16 +57,16 @@
 .transaction-item__actions {
   display: flex;
   justify-content: flex-end;
-  gap: 8px;
+  gap: 7px;
 }
 
 .transaction-item button {
-  padding: 7px 14px;
+  padding: 6px 13px;
   border: 1px solid var(--border);
   border-radius: var(--r-sm);
   background: var(--surface);
   color: var(--green-strong);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
   cursor: pointer;
 }
@@ -81,7 +81,7 @@
 @media (max-width: 1024px) {
   .transaction-item {
     grid-template-columns: minmax(0, 1fr) auto;
-    gap: 10px;
+    gap: 9px;
   }
 
   .transaction-item__amount,
@@ -94,7 +94,7 @@
 @media (max-width: 640px) {
   .transaction-item {
     grid-template-columns: 1fr;
-    gap: 8px;
+    gap: 7px;
   }
 
   .transaction-item__actions {

@@ -1,28 +1,28 @@
 .role-switcher {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 6px 10px;
+  gap: 7px;
+  padding: 5px 9px;
   border: 1px solid var(--border);
   border-radius: var(--r-md);
   background: var(--surface);
 }
 
 .role-switcher__label {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   color: var(--text);
   white-space: nowrap;
 }
 
 .role-switcher select {
-  min-width: 100px;
-  padding: 4px 8px;
+  min-width: 90px;
+  padding: 4px 7px;
   border: 1px solid var(--border);
   border-radius: var(--r-sm);
   background: var(--bg);
   color: var(--text);
-  font-size: 14px;
+  font-size: 13px;
   cursor: pointer;
   outline: none;
 }

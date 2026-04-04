@@ -1,13 +1,13 @@
 .insights-section {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 11px;
   width: 100%;
-  margin-top: 10px;
+  margin-top: 9px;
 }
 
 .insights-card {
-  padding: 20px;
+  padding: 18px;
   border: 1px solid var(--border);
   border-radius: var(--r-lg);
   background: var(--surface);
@@ -25,17 +25,17 @@
 }
 
 .insights-card__eyebrow {
-  margin: 0 0 6px;
-  font-size: 11px;
+  margin: 0 0 5px;
+  font-size: 10px;
   font-weight: 500;
   letter-spacing: 0.07em;
   color: var(--muted);
 }
 .transactions-section__input,
 .insights-card__month-select {
-  margin-left: 10px;
-  padding: 4px 8px;
-  font-size: 12px;
+  margin-left: 9px;
+  padding: 4px 7px;
+  font-size: 11px;
   border: 1px solid var(--border);
   border-radius: var(--r-sm);
   background: var(--surface);
@@ -44,21 +44,21 @@
 
 .insights-card h3 {
   margin: 0;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 600;
   letter-spacing: -0.02em;
 }
 
 .insights-card__value {
-  margin: 10px 0 0;
-  font-size: 24px;
+  margin: 9px 0 0;
+  font-size: 22px;
   font-weight: 600;
   letter-spacing: -0.03em;
   color: var(--green-strong);
 }
 
 .insights-card__caption {
-  margin: 6px 0 0;
-  font-size: 12px;
+  margin: 5px 0 0;
+  font-size: 11px;
   color: var(--muted);
 }

@@ -1,15 +1,15 @@
 #root {
-  width: calc(100% - 150px);
-  max-width: 1440px;
+  width: calc(100% - 135px);
+  max-width: 1296px;
   margin: 0 auto;
-  padding: 24px 0 36px;
+  padding: 22px 0 32px;
 }
 
 .app-shell {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  padding: 20px;
+  gap: 13px;
+  padding: 18px;
   border: 1px solid var(--border-strong);
   border-radius: var(--r-xl);
   background: var(--shell);
@@ -22,26 +22,26 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 16px;
-  padding: 8px 4px 20px;
+  gap: 14px;
+  padding: 7px 4px 18px;
   border-bottom: 1px solid var(--border-strong);
 }
 
 .app-header__intro {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 13px;
 }
 
 .app-header__logo {
   display: grid;
   place-items: center;
-  width: 46px;
-  height: 46px;
+  width: 41px;
+  height: 41px;
   border-radius: var(--r-md);
   background: var(--accent);
   color: #ffffff;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.02em;
   flex-shrink: 0;
@@ -54,19 +54,19 @@
 }
 
 .app-header__eyebrow {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.07em;
   color: var(--muted);
 }
 
 .app-header__subtitle {
-  font-size: 13px;
+  font-size: 12px;
   color: var(--muted);
 }
 
 .app-header h1 {
-  font-size: 30px;
+  font-size: 27px;
   font-weight: 700;
   letter-spacing: -0.03em;
   color: var(--text);
@@ -75,16 +75,16 @@
 .app-header__actions {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 9px;
 }
 
 .app-theme-toggle {
-  padding: 8px 14px;
+  padding: 7px 13px;
   border: 1px solid var(--border-strong);
   border-radius: var(--r-md);
   background: var(--surface);
   color: var(--text);
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
 }
@@ -100,8 +100,8 @@
 
 .dashboard-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 350px;
-  gap: 14px;
+  grid-template-columns: minmax(0, 1fr) 315px;
+  gap: 13px;
   align-items: start;
 }
 
@@ -109,7 +109,7 @@
 .dashboard-side {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 13px;
 }
 
 @media (max-width: 1080px) {
@@ -120,21 +120,21 @@
 
 @media (max-width: 720px) {
   #root {
-    width: calc(100% - 16px);
-    padding-top: 12px;
-    padding-bottom: 24px;
+    width: calc(100% - 14px);
+    padding-top: 11px;
+    padding-bottom: 22px;
   }
 
   .app-shell {
-    padding: 14px;
+    padding: 13px;
     border-radius: var(--r-lg);
-    gap: 12px;
+    gap: 11px;
   }
 
   .app-header {
     flex-direction: column;
     align-items: flex-start;
-    padding: 4px 0 16px;
+    padding: 4px 0 14px;
   }
 
   .app-header__actions {
@@ -143,6 +143,6 @@
   }
 
   .app-header h1 {
-    font-size: 26px;
+    font-size: 23px;
   }
 }
