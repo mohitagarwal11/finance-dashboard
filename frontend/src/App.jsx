@@ -5,7 +5,7 @@ import { initialTransactions } from "./data/transactions";
 import SummarySection from "./sections/SummarySection/SummarySection";
 import TransactionsSection from "./sections/TransactionsSection/TransactionsSection";
 import InsightsSection from "./sections/InsightsSection/InsightsSection";
-// import ChartsSection from "./sections/ChartsSection/ChartsSection";
+import ChartsSection from "./sections/ChartsSection/ChartsSection";
 
 import RoleSwitcher from "./components/RoleSwitcher/RoleSwitcher";
 
@@ -24,7 +24,7 @@ function App() {
     return data ? JSON.parse(data) : initialTransactions;
   });
 
-  const [role, setRole] = useState("admin");
+  const [role, setRole] = useState("user");
   const [theme, setTheme] = useState(getInitialTheme);
   const [filters, setFilters] = useState({
     search: "",
@@ -96,7 +96,7 @@ function App() {
       <div className="dashboard-layout">
         <div className="dashboard-main">
           <SummarySection transactions={transactions} />
-          {/* <ChartsSection transactions={transactions} /> */}
+          <ChartsSection transactions={transactions} />
         </div>
 
         <aside className="dashboard-side">
