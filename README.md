@@ -1,4 +1,4 @@
-# Finance Dashboard
+# FinMo
 
 A responsive personal finance dashboard built for an internship assignment. The app helps users review income and expenses, inspect spending patterns through charts, track monthly limits, and manage transactions through a simple role-based interface.
 
