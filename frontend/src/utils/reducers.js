@@ -62,3 +62,18 @@ export function monthlyTotalsReducer(transactions) {
     return acc;
   }, {});
 }
+
+// this gives us the total income and expense across all transactions in the format { totalIncome: 5000, totalExpenses: 3000 }
+export function totalReducer(transactions) {
+  return transactions.reduce(
+    (acc, txn) => {
+      if (txn.type === "income") {
+        acc.totalIncome += txn.amount;
+      } else {
+        acc.totalExpenses += txn.amount;
+      }
+      return acc;
+    },
+    { totalIncome: 0, totalExpenses: 0 },
+  );
+}

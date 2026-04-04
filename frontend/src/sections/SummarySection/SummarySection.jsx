@@ -1,17 +1,10 @@
 import "./SummarySection.css";
 import SummaryCard from "../../components/SummaryCard/SummaryCard";
-
+import { totalReducer } from "../../utils/reducers";
 function SummarySection({ transactions }) {
   // here totalIncome and totalExpenses are the accumulators 
   // the reducer iterates through all transactions and updates the totalIncome and totalExpenses
-  const summary = transactions.reduce((acc, txn) => {
-    if (txn.type === "income") {
-      acc.totalIncome += txn.amount;
-    } else {
-      acc.totalExpenses += txn.amount;
-    }
-    return acc;
-  }, { totalIncome: 0, totalExpenses: 0 });
+  const summary = totalReducer(transactions);
   const netBalance = summary.totalIncome - summary.totalExpenses;
 
   return (
