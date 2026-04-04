@@ -4,7 +4,7 @@ A responsive personal finance dashboard built for an internship assignment. The 
 
 ## Deployed Build
 
-Live Demo: `https://finemo-beryl.vercel.app/`
+Live Demo: https://finmo-beryl.vercel.app/
 
 ## Screenshots
 
