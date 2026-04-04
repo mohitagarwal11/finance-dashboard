@@ -63,8 +63,9 @@ function InsightsSection({ transactions, expenseLimit, setExpenseLimit, role }) 
         </p>
         <p className="insights-card__caption">
           {monthlyTotals[selectedMonth] && monthlyTotals[selectedMonth].expense > expenseLimit
-            ? `${percentOver}% over your monthly budget of ${formatCurrency(expenseLimit)}.`
-            : `${percentUnder}% remaining off ${formatCurrency(expenseLimit)}.`}
+            ? `You've blown past your ${formatCurrency(expenseLimit)} budget by ${percentOver}%.`
+            : `Good job! You have ${percentUnder}% of your ${formatCurrency(expenseLimit)} budget still to go.`
+          }
         </p>
       </div>
 
@@ -94,6 +95,14 @@ function InsightsSection({ transactions, expenseLimit, setExpenseLimit, role }) 
           {monthlyTotals[selectedMonth]
             ? formatCurrency(monthlyTotals[selectedMonth].income - monthlyTotals[selectedMonth].expense)
             : formatCurrency(0)}
+        </p>
+        <p className="insights-card__caption">
+          {selectedMonthData && monthlyTotals[selectedMonth] ?
+            `${monthlyTotals[selectedMonth].income >= monthlyTotals[selectedMonth].expense
+              ? "You came out ahead this month."
+              : "Your expenses outran your income this month."}`
+            : "No expenses recorded for this month."
+          }
         </p>
       </div>
     </section>

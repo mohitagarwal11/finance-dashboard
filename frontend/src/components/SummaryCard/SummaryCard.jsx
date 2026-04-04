@@ -1,7 +1,7 @@
 import "./SummaryCard.css";
 import { formatCurrency } from "../../utils/formatters";
 
-function SummaryCard({ title, value, type }) {
+function SummaryCard({ title, value, type = "balance" }) {
   return (
     <div className={`summary-card summary-card--${type}`}>
       <span className="summary-card__label">{title}</span>

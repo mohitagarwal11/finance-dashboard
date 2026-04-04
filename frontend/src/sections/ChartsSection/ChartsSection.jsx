@@ -85,7 +85,6 @@ function ChartsSection({ transactions }) {
                     pointStyle: "circle",
                     boxWidth: 7,
                     boxHeight: 7,
-                    padding: 16,
                   },
                 },
               },

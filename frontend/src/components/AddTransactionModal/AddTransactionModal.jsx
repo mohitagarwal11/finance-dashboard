@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import "./AddTransactionModal.css";
 
 function AddTransactionModal({ onAdd, onClose, initialData, onEdit }) {
@@ -7,8 +7,8 @@ function AddTransactionModal({ onAdd, onClose, initialData, onEdit }) {
   const initialState = {
     title: "",
     amount: "",
-    type: "expense",
-    category: "food",
+    type: "",
+    category: "",
     date: "",
   };
 
@@ -57,13 +57,14 @@ function AddTransactionModal({ onAdd, onClose, initialData, onEdit }) {
   };
 
   // to update the form data if edit is clicked for other txn without closing the modal
-  useEffect(() => {
-    if (initialData) {
-      setForm(initialData);
-    } else {
-      setForm(initialState);
-    }
-  }, [initialData]);
+  // not required anymore because we dont allow user to edit multiple txn without closing the current modal
+  // useEffect(() => {
+  //   if (initialData) {
+  //     setForm(initialData);
+  //   } else {
+  //     setForm(initialState);
+  //   }
+  // }, [initialData]);
 
   return (
     <div className="modal-backdrop">
@@ -116,13 +117,13 @@ function AddTransactionModal({ onAdd, onClose, initialData, onEdit }) {
                 value={form.category}
                 onChange={handleChange}
               >
-                <option value="food">Food</option>
-                <option value="rent">Rent</option>
-                <option value="transportation">Transportation</option>
-                <option value="utilities">Utilities</option>
-                <option value="entertainment">Entertainment</option>
-                <option value="salary">Salary</option>
-                <option value="investment">Investment</option>
+                <option value="Food">Food</option>
+                <option value="Rent">Rent</option>
+                <option value="Transportation">Transportation</option>
+                <option value="Utilities">Utilities</option>
+                <option value="Entertainment">Entertainment</option>
+                <option value="Salary">Salary</option>
+                <option value="Investment">Investment</option>
               </select>
             </label>
 

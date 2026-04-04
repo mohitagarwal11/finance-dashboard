@@ -1,3 +1,4 @@
+/* to cover the viewport and not allow clicking on multiple edits */
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -15,7 +16,6 @@
   border-radius: var(--r-xl);
 }
 
-/* ── Header ──────────────────────────── */
 .modal-card__header {
   padding: 20px 20px 7px;
 }
@@ -34,7 +34,6 @@
   letter-spacing: -0.02em;
 }
 
-/* ── Form ────────────────────────────── */
 .modal-form {
   padding: 11px 20px 20px;
 }
@@ -81,7 +80,6 @@
   background: var(--surface);
 }
 
-/* ── Actions ─────────────────────────── */
 .modal-form__actions {
   display: flex;
   justify-content: flex-end;
@@ -111,7 +109,6 @@
   color: var(--text);
 }
 
-/* ── Responsive ──────────────────────── */
 @media (max-width: 640px) {
   .modal-form__grid {
     grid-template-columns: 1fr;

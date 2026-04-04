@@ -9,7 +9,6 @@
   background: var(--surface);
 }
 
-/* ── Columns ─────────────────────────── */
 .transaction-item__title {
   display: flex;
   flex-direction: column;
@@ -18,7 +17,7 @@
 
 .transaction-item__title h3 {
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--text);
 }
 
@@ -30,7 +29,7 @@
 
 .transaction-item__amount {
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--text);
 }
 
@@ -53,7 +52,6 @@
   color: var(--muted);
 }
 
-/* ── Actions ─────────────────────────── */
 .transaction-item__actions {
   display: flex;
   justify-content: flex-end;
@@ -77,7 +75,6 @@
   color: var(--danger-text);
 }
 
-/* ── Responsive ──────────────────────── */
 @media (max-width: 1024px) {
   .transaction-item {
     grid-template-columns: minmax(0, 1fr) auto;

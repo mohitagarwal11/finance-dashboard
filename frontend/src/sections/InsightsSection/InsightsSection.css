@@ -1,4 +1,5 @@
 .insights-section {
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 11px;
@@ -7,6 +8,7 @@
 }
 
 .insights-card {
+  min-width: 0;
   padding: 18px;
   border: 1px solid var(--border);
   border-radius: var(--r-lg);
@@ -19,9 +21,12 @@
 }
 
 .insights-card__header {
+  min-width: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .insights-card__eyebrow {
@@ -33,12 +38,11 @@
 }
 .transactions-section__input,
 .insights-card__month-select {
-  margin-left: 9px;
   padding: 4px 7px;
   font-size: 11px;
   border: 1px solid var(--border);
   border-radius: var(--r-sm);
-  background: var(--surface);
+  background: var(--bg);
   color: var(--text);
 }
 
@@ -52,13 +56,14 @@
 .insights-card__value {
   margin: 9px 0 0;
   font-size: 22px;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: -0.03em;
-  color: var(--green-strong);
+  color: var(--text);
 }
 
 .insights-card__caption {
   margin: 5px 0 0;
   font-size: 11px;
   color: var(--muted);
+  overflow-wrap: anywhere;
 }

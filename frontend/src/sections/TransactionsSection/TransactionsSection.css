@@ -42,7 +42,6 @@
   flex-shrink: 0;
 }
 
-/* ── Filters ─────────────────────────── */
 .transactions-section__filters {
   display: grid;
   grid-template-columns: minmax(0, 1.5fr) repeat(2, minmax(126px, 0.8fr));
@@ -57,19 +56,15 @@
   border-radius: var(--r-md);
   background: var(--bg);
   color: var(--text);
-  font-size: 13px;
-  outline: none;
+  font-size: 12px;
 }
 
 .transactions-section__filters input:focus,
 .transactions-section__filters select:focus {
-  border-color: var(--accent);
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
+  border-color: var(--border-focus);
   background: var(--surface);
 }
 
-/* ── List ────────────────────────────── */
 .transactions-list {
   display: flex;
   flex-direction: column;
@@ -98,7 +93,6 @@
   text-align: center;
 }
 
-/* ── Responsive ──────────────────────── */
 @media (max-width: 640px) {
   .transactions-section {
     padding: 14px;

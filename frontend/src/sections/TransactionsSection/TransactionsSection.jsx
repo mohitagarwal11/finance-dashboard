@@ -29,6 +29,7 @@ function TransactionsSection({
       filters.type == "all" || txn.type.toLowerCase() == filters.type.toLowerCase();
     return matchesSearch && matchesCategory && matchesType;
   });
+  
   return (
     <section className="transactions-section">
       <div className="transactions-section__header">

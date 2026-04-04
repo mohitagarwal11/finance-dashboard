@@ -67,57 +67,58 @@ function App() {
 
   return (
     <div className="app-shell">
-      <header className="app-header">
-        <div className="app-header__intro">
-          <div className="app-header__logo">MA</div>
-          <div className="app-header__copy">
-            <p className="app-header__eyebrow">Personal account</p>
-            <h1>Good morning, Mohit</h1>
+      <div className="app-shell__content">
+        <header className="app-header">
+          <div className="app-header__intro">
+            <div className="app-header__logo">MA</div>
+            <div className="app-header__copy">
+              <p className="app-header__eyebrow">Personal account</p>
+              <h1>Good morning, Mohit</h1>
+            </div>
           </div>
+
+          <div className="app-header__actions">
+            <button
+              className="app-theme-toggle"
+              type="button"
+              onClick={() =>
+                setTheme((currentTheme) =>
+                  currentTheme === "dark" ? "light" : "dark"
+                )
+              }
+            >
+              {theme === "dark" ? "Light mode" : "Dark mode"}
+            </button>
+            <RoleSwitcher role={role} setRole={setRole} />
+          </div>
+        </header>
+
+        <div className="dashboard-layout">
+          <div className="dashboard-main">
+            <SummarySection transactions={transactions} />
+            <ChartsSection transactions={transactions} />
+          </div>
+
+          <aside className="dashboard-side">
+            <InsightsSection
+              transactions={transactions}
+              expenseLimit={expenseLimit}
+              setExpenseLimit={setExpenseLimit}
+              role={role}
+            />
+          </aside>
         </div>
 
-        <div className="app-header__actions">
-          <button
-            className="app-theme-toggle"
-            type="button"
-            onClick={() =>
-              setTheme((currentTheme) =>
-                currentTheme === "dark" ? "light" : "dark"
-              )
-            }
-            aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
-          >
-            {theme === "dark" ? "Light mode" : "Dark mode"}
-          </button>
-          <RoleSwitcher role={role} setRole={setRole} />
-        </div>
-      </header>
-
-      <div className="dashboard-layout">
-        <div className="dashboard-main">
-          <SummarySection transactions={transactions} />
-          <ChartsSection transactions={transactions} />
-        </div>
-
-        <aside className="dashboard-side">
-          <InsightsSection
-            transactions={transactions}
-            expenseLimit={expenseLimit}
-            setExpenseLimit={setExpenseLimit}
-            role={role}
-          />
-        </aside>
+        <TransactionsSection
+          transactions={transactions}
+          filters={filters}
+          setFilters={setFilters}
+          role={role}
+          handleAddTxn={handleAddTxn}
+          handleDeleteTxn={handleDeleteTxn}
+          handleEditTxn={handleEditTxn}
+        />
       </div>
-
-      <TransactionsSection
-        transactions={transactions}
-        filters={filters}
-        setFilters={setFilters}
-        role={role}
-        handleAddTxn={handleAddTxn}
-        handleDeleteTxn={handleDeleteTxn}
-        handleEditTxn={handleEditTxn}
-      />
     </div>
   );
 }
