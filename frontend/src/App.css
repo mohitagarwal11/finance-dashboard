@@ -6,17 +6,17 @@
 .app-shell {
   min-height: 100dvh;
   width: 100%;
-  padding: 22px clamp(14px, 3vw, 32px) 32px;
+  padding: 24px clamp(15px, 3vw, 35px) 35px;
 }
 
 .app-shell__content {
   width: 100%;
-  max-width: 1296px;
+  max-width: 1426px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 13px;
-  padding: 18px;
+  gap: 14px;
+  padding: 20px;
   border: 1px solid var(--border-strong);
   border-radius: var(--r-xl);
   background: var(--shell);
@@ -29,27 +29,27 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 14px;
-  padding: 7px 4px 18px;
+  gap: 15px;
+  padding: 8px 4px 20px;
   border-bottom: 1px solid var(--border-strong);
 }
 
 .app-header__intro {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 13px;
 }
 
 .app-header__logo {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border-radius: var(--r-md);
   background: var(--accent);
   color: #ffffff;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.02em;
 }
@@ -60,7 +60,7 @@
 }
 
 .app-header__eyebrow {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 500;
   letter-spacing: 0.07em;
   color: var(--muted);
@@ -68,7 +68,7 @@
 }
 
 .app-header h1 {
-  font-size: 27px;
+  font-size: 30px;
   font-weight: 600;
   letter-spacing: -0.03em;
   color: var(--text);
@@ -77,22 +77,22 @@
 .app-header__actions {
   display: flex;
   align-items: center;
-  gap: 9px;
+  gap: 10px;
 }
 
 .app-theme-toggle {
-  padding: 7px 13px;
+  padding: 8px 14px;
   border: 1px solid var(--border-strong);
   border-radius: var(--r-md);
   background: var(--bg);
   color: var(--text);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
 }
 
 .app-theme-toggle:hover {
-  border-color: var(--border-strong);
+  border-color: var(--border-focus);
 }
 
 .app-theme-toggle:focus-visible {
@@ -102,8 +102,8 @@
 
 .dashboard-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 315px;
-  gap: 13px;
+  grid-template-columns: minmax(0, 1fr) 347px;
+  gap: 14px;
   align-items: start;
 }
 
@@ -112,30 +112,30 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 13px;
+  gap: 14px;
 }
 
-@media (max-width: 1080px) {
+@media (max-width: 1188px) {
   .dashboard-layout {
     grid-template-columns: 1fr;
   }
 }
 
-@media (max-width: 720px) {
+@media (max-width: 792px) {
   .app-shell {
-    padding: 11px 7px 22px;
+    padding: 12px 8px 24px;
   }
 
   .app-shell__content {
-    padding: 13px;
+    padding: 14px;
     border-radius: var(--r-lg);
-    gap: 11px;
+    gap: 12px;
   }
 
   .app-header {
     flex-direction: column;
     align-items: flex-start;
-    padding: 4px 0 14px;
+    padding: 4px 0 15px;
   }
 
   .app-header__actions {
@@ -144,6 +144,6 @@
   }
 
   .app-header h1 {
-    font-size: 23px;
+    font-size: 25px;
   }
 }

@@ -1,29 +1,33 @@
 .role-switcher {
   display: flex;
   align-items: center;
-  gap: 7px;
-  padding: 5px 9px;
+  gap: 8px;
+  padding: 6px 10px;
   border: 1px solid var(--border);
   border-radius: var(--r-md);
   background: var(--bg);
 }
 
 .role-switcher__label {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   color: var(--text);
 }
 
 .role-switcher select {
-  min-width: 90px;
-  padding: 4px 7px;
-  border: 1px solid var(--border);
+  min-width: 99px;
+  padding: 4px 8px;
+  border: 1px solid var(--border-strong);
   border-radius: var(--r-sm);
   background: var(--surface);
   color: var(--text);
-  font-size: 13px;
+  font-size: 14px;
   cursor: pointer;
   outline: none;
+}
+
+.role-switcher select:hover {
+  border-color: var(--border-focus);
 }
 
 .role-switcher select:focus {

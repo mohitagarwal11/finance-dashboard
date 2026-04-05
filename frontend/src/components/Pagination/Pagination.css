@@ -1,0 +1,25 @@
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 22px;
+}
+
+.pagination__button {
+  padding: 9px 11px;
+  margin: 0 4px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.pagination__button:hover {
+  border-color: var(--border-focus);
+}
+
+.pagination__button:focus {
+  border-color: var(--border-focus);
+  background: var(--surface);
+}
