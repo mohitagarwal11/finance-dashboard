@@ -1,8 +1,8 @@
 .transactions-section {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  padding: 18px;
+  gap: 15px;
+  padding: 20px;
   border: 1px solid var(--border);
   border-radius: var(--r-lg);
   background: var(--surface);
@@ -12,30 +12,30 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 11px;
+  gap: 12px;
 }
 
 .transactions-section__eyebrow {
   margin: 0 0 4px;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.07em;
   color: var(--muted);
 }
 
 .transactions-section h2 {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 600;
   letter-spacing: -0.02em;
 }
 
 .transactions-section__add-button {
-  padding: 9px 16px;
+  padding: 10px 18px;
   border: none;
   border-radius: var(--r-md);
   background: var(--accent);
   color: #ffffff;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
@@ -44,19 +44,24 @@
 
 .transactions-section__filters {
   display: grid;
-  grid-template-columns: minmax(0, 1.5fr) repeat(2, minmax(126px, 0.8fr));
-  gap: 9px;
+  grid-template-columns: minmax(0, 1.5fr) repeat(2, minmax(139px, 0.8fr));
+  gap: 10px;
 }
 
 .transactions-section__filters input,
 .transactions-section__filters select {
   width: 100%;
-  padding: 9px 13px;
+  padding: 10px 14px;
   border: 1px solid var(--border);
   border-radius: var(--r-md);
   background: var(--bg);
   color: var(--text);
-  font-size: 12px;
+  font-size: 13px;
+}
+
+.transactions-section__filters input:hover,
+.transactions-section__filters select:hover {
+  border-color: var(--border-focus);
 }
 
 .transactions-section__filters input:focus,
@@ -68,15 +73,15 @@
 .transactions-list {
   display: flex;
   flex-direction: column;
-  gap: 7px;
+  gap: 8px;
 }
 
 .transactions-list__head {
   display: grid;
-  grid-template-columns: minmax(0, 1.6fr) 126px 90px 99px 108px;
-  gap: 11px;
-  padding: 0 13px;
-  font-size: 10px;
+  grid-template-columns: minmax(0, 1.6fr) 139px 99px 109px 119px;
+  gap: 12px;
+  padding: 0 14px;
+  font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.05em;
   color: var(--muted);
@@ -84,18 +89,18 @@
 
 .transactions-list__empty {
   margin: 0;
-  padding: 20px;
+  padding: 22px;
   border: 1px dashed var(--border);
   border-radius: var(--r-md);
   background: var(--bg);
-  font-size: 13px;
+  font-size: 14px;
   color: var(--muted);
   text-align: center;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 704px) {
   .transactions-section {
-    padding: 14px;
+    padding: 15px;
   }
 
   .transactions-section__header {
