@@ -141,6 +141,7 @@ finance-dashboard/
         |   |-- AddTransactionModal/
         |   |-- RoleSwitcher/
         |   |-- SummaryCard/
+        |   |-- Pagination/
         |   \-- TransactionItem/
         \-- sections/
             |-- ChartsSection/
