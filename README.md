@@ -39,7 +39,8 @@ The interface is organized around a few core workflows:
   - monthly income vs expense trends(Line Chart)
   - expense distribution by category(Doughnut/Pie Chart)
 - Insights panel showing:
-  - monthly expense tracker(configurable expense limit in Admin mode)
+  - month selector in User mode and configurable expense limit in Admin mode
+  - monthly expense tracker
   - highest spending category for the selected month
   - monthly net savings
 - Transaction list with filters for:
@@ -66,7 +67,7 @@ The interface is organized around a few core workflows:
 | Frontend            | React                               |
 | Build Tool          | Vite                                |
 | Charts              | Chart.js, `react-chartjs-2`         |
-| Styling             | Plain CSS                           |
+| Styling             | Tailwind CSS                        |
 | State & Persistence | React hooks, browser `localStorage` |
 
 ## Getting Started
@@ -130,7 +131,6 @@ finance-dashboard/
     \-- src/
         |-- App.jsx
         |-- main.jsx
-        |-- App.css
         |-- index.css
         |-- data/
         |   \-- transactions.js
@@ -155,6 +155,7 @@ finance-dashboard/
 - Currency values are formatted in Indian Rupees (`INR`)
 - The starter dataset includes historical mock transactions across several months
 - Clearing browser storage will reset the app back to its initial mock data state
+- Component styling is handled with Tailwind utility classes in JSX, while `index.css` keeps the Tailwind import and global theme variables
 
 ## Acknowledgements
 
