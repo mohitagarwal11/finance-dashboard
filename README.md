@@ -122,6 +122,8 @@ There is no backend or authentication layer in this version. The `user` and `adm
 
 ## Project Structure
 
+Components and dashboard sections are kept as flat `.jsx` files because each one currently has a single implementation file. Shared data and calculation/formatting helpers live in dedicated `data` and `utils` folders.
+
 ```text
 finance-dashboard/
 \-- frontend/
@@ -138,16 +140,16 @@ finance-dashboard/
         |   |-- formatters.js
         |   \-- reducers.js
         |-- components/
-        |   |-- AddTransactionModal/
-        |   |-- RoleSwitcher/
-        |   |-- SummaryCard/
-        |   |-- Pagination/
-        |   \-- TransactionItem/
+        |   |-- AddTransactionModal.jsx
+        |   |-- Pagination.jsx
+        |   |-- RoleSwitcher.jsx
+        |   |-- SummaryCard.jsx
+        |   \-- TransactionItem.jsx
         \-- sections/
-            |-- ChartsSection/
-            |-- InsightsSection/
-            |-- SummarySection/
-            \-- TransactionsSection/
+            |-- ChartsSection.jsx
+            |-- InsightsSection.jsx
+            |-- SummarySection.jsx
+            \-- TransactionsSection.jsx
 ```
 
 ## Notes

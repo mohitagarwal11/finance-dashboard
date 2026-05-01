@@ -1,4 +1,4 @@
-import { formatCurrency, formatTransactionDate } from "../../utils/formatters";
+import { formatCurrency, formatTransactionDate } from "../utils/formatters";
 
 function TransactionItem({ transaction, role, onEdit, onDelete }) {
   const { title, amount, type, category, date } = transaction;
@@ -12,7 +12,9 @@ function TransactionItem({ transaction, role, onEdit, onDelete }) {
         <p className="m-0 text-[13px] text-(--muted)">{category}</p>
       </div>
 
-      <p className={`text-sm font-medium max-[1126px]:justify-self-start ${amountColor}`}>
+      <p
+        className={`text-sm font-medium max-[1126px]:justify-self-start ${amountColor}`}
+      >
         {type === "expense" ? "-" : "+"}
         {formatCurrency(amount)}
       </p>

@@ -1,4 +1,4 @@
-import { formatCurrency } from "../../utils/formatters";
+import { formatCurrency } from "../utils/formatters";
 
 function SummaryCard({ title, value, type = "balance" }) {
   const valueColor =

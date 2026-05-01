@@ -1,7 +1,7 @@
 import { useState } from "react";
-import TransactionItem from "../../components/TransactionItem/TransactionItem";
-import AddTransactionModal from "../../components/AddTransactionModal/AddTransactionModal";
-import Pagination from "../../components/Pagination/Pagination";
+import TransactionItem from "../components/TransactionItem";
+import AddTransactionModal from "../components/AddTransactionModal";
+import Pagination from "../components/Pagination";
 
 const filterFieldClass =
   "w-full rounded-(--r-md) border border-(--border) bg-(--bg) px-3.5 py-2.5 text-[13px] text-(--text) hover:border-(--border-focus) focus:border-(--border-focus) focus:bg-(--surface)";

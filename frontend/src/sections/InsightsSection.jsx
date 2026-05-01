@@ -1,9 +1,9 @@
-import { formatCurrency, formatMonthLabel } from "../../utils/formatters";
+import { formatCurrency, formatMonthLabel } from "../utils/formatters";
 import {
   monthlyCategoryTotalsReducer,
   getHighestExpenseCategoryForMonth,
   monthlyTotalsReducer,
-} from "../../utils/reducers";
+} from "../utils/reducers";
 import { useState } from "react";
 
 const compactFieldClass =

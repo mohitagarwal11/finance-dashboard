@@ -1,11 +1,11 @@
 import { defaults } from "chart.js/auto";
 import { Doughnut, Line } from "react-chartjs-2";
-import { formatMonthLabel, formatCurrency } from "../../utils/formatters";
+import { formatMonthLabel, formatCurrency } from "../utils/formatters";
 import {
   categoryTotalsReducer,
   monthlyTotalsReducer,
   totalReducer,
-} from "../../utils/reducers";
+} from "../utils/reducers";
 
 defaults.maintainAspectRatio = false;
 defaults.responsive = true;

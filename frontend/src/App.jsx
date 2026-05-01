@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { initialTransactions } from "./data/transactions";
 
-import SummarySection from "./sections/SummarySection/SummarySection";
-import TransactionsSection from "./sections/TransactionsSection/TransactionsSection";
-import InsightsSection from "./sections/InsightsSection/InsightsSection";
-import ChartsSection from "./sections/ChartsSection/ChartsSection";
+import SummarySection from "./sections/SummarySection";
+import TransactionsSection from "./sections/TransactionsSection";
+import InsightsSection from "./sections/InsightsSection";
+import ChartsSection from "./sections/ChartsSection";
 
-import RoleSwitcher from "./components/RoleSwitcher/RoleSwitcher";
+import RoleSwitcher from "./components/RoleSwitcher";
 
 function getInitialTheme() {
   const storedTheme = localStorage.getItem("theme");
