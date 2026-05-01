@@ -15,10 +15,13 @@ function ChartsSection({ transactions }) {
   const categoryTotals = categoryTotalsReducer(transactions);
   const summary = totalReducer(transactions);
 
-  const monthLabels = Object.keys(monthlyTotals).map((date) =>
+  const monthlyEntries = Object.entries(monthlyTotals).sort(([a], [b]) =>
+    a.localeCompare(b),
+  );
+  const monthLabels = monthlyEntries.map(([date]) =>
     formatMonthLabel(date).slice(0, 3),
   );
-  const monthlyValues = Object.values(monthlyTotals);
+  const monthlyValues = monthlyEntries.map(([, totals]) => totals);
   const categoryLabels = Object.keys(categoryTotals);
   const categoryValues = Object.values(categoryTotals);
 
@@ -64,30 +67,27 @@ function ChartsSection({ transactions }) {
               ],
             }}
             options={{
+              interaction: {
+                mode: "index",
+                intersect: false,
+              },
               plugins: {
                 tooltip: {
                   callbacks: {
-                    label: () => "",
-                    title: (context) => `${context[0].dataset.label}`,
-                    afterTitle: (context) => {
-                      const datasetIndex = context[0].datasetIndex;
-                      const monthData = monthlyValues[context[0].dataIndex];
-                      const amount =
-                        datasetIndex === 0
-                          ? monthData.income
-                          : monthData.expense;
-                      return `${formatCurrency(amount)}`;
-                    },
+                    title: (context) => monthLabels[context[0].dataIndex],
+                    label: (context) =>
+                      `${context.dataset.label}: ${formatCurrency(context.parsed.y)}`,
                   },
                 },
                 legend: {
-                  align: "start",
-                  position: "top",
+                  align: "center",
+                  position: "bottom",
                   labels: {
                     usePointStyle: true,
                     pointStyle: "circle",
                     boxWidth: 7,
                     boxHeight: 7,
+                    padding: 14,
                   },
                 },
               },
