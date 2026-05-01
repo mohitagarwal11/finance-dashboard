@@ -1,8 +1,10 @@
 import { useState } from 'react';
-import "./TransactionsSection.css";
 import TransactionItem from '../../components/TransactionItem/TransactionItem';
 import AddTransactionModal from '../../components/AddTransactionModal/AddTransactionModal';
 import Pagination from '../../components/Pagination/Pagination';
+
+const filterFieldClass =
+  "w-full rounded-(--r-md) border border-(--border) bg-(--bg) px-3.5 py-2.5 text-[13px] text-(--text) hover:border-(--border-focus) focus:border-(--border-focus) focus:bg-(--surface)";
 
 function TransactionsSection({
   transactions,
@@ -39,24 +41,29 @@ function TransactionsSection({
   const currTxns = filteredTransactions.slice(indexOfFirstTxn, indexOfLastTxn);
 
   return (
-    <section className="transactions-section">
-      <div className="transactions-section__header">
+    <section className="flex flex-col gap-4 rounded-(--r-lg) border border-(--border) bg-(--surface) p-5 max-[704px]:p-4">
+      <div className="flex items-center justify-between gap-3.5 max-[704px]:flex-wrap">
         <div>
-          <h2>Transaction and Invoices</h2>
-          <p className="transactions-section__eyebrow">Recent financial activities</p>
+          <h2 className="text-xl font-semibold tracking-normal text-(--text)">
+            Transaction and Invoices
+          </h2>
+          <p className="mb-1 mt-0 text-[11px] font-semibold tracking-[0.07em] text-(--muted)">
+            Recent financial activities
+          </p>
         </div>
 
         {role === "admin" && (
           <button
-            className="transactions-section__add-button"
+            className="shrink-0 cursor-pointer whitespace-nowrap rounded-(--r-md) border-0 bg-(--accent) px-4.5 py-2.5 text-center text-sm font-semibold text-white max-[704px]:w-full"
             onClick={() => setIsModalOpen(true)}
           >
             Add transaction
           </button>
         )}
 
-        <div className="transactions-section__filters">
+        <div className="grid grid-cols-[minmax(0,1.5fr)_repeat(2,minmax(139px,0.8fr))] gap-3 max-[704px]:grid-cols-1">
           <input
+            className={filterFieldClass}
             type="text"
             placeholder="Search transactions"
             value={filters.search}
@@ -64,6 +71,7 @@ function TransactionsSection({
           />
 
           <select
+            className={filterFieldClass}
             value={filters.category}
             onChange={(e) => setFilters({ ...filters, category: e.target.value })}
           >
@@ -78,6 +86,7 @@ function TransactionsSection({
           </select>
 
           <select
+            className={filterFieldClass}
             value={filters.type}
             onChange={(e) => setFilters({ ...filters, type: e.target.value })}
           >
@@ -100,8 +109,8 @@ function TransactionsSection({
         />
       )}
 
-      <div className="transactions-list">
-        <div className="transactions-list__head">
+      <div className="flex flex-col gap-2.5">
+        <div className="grid grid-cols-[minmax(0,1.6fr)_139px_99px_109px_119px] gap-3 px-3.5 text-[11px] font-semibold tracking-[0.05em] text-(--muted) max-[704px]:hidden">
           <span>Title</span>
           <span>Amount</span>
           <span>Type</span>
@@ -110,7 +119,9 @@ function TransactionsSection({
         </div>
 
         {filteredTransactions.length === 0 ? (
-          <p className="transactions-list__empty">No transactions match these filters.</p>
+          <p className="m-0 rounded-(--r-md) border border-dashed border-(--border) bg-(--bg) p-5 text-center text-sm text-(--muted)">
+            No transactions match these filters.
+          </p>
         ) : (
           currTxns.map((txn) => (
             <TransactionItem

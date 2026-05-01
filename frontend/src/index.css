@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+@import "tailwindcss";
 
 :root {
   color-scheme: light;
@@ -9,6 +10,7 @@
 
   --border: #d7e0ea;
   --border-strong: #c2cfdd;
+  --border-focus: #16a34a;
 
   --text: #142033;
   --muted: #5e6f87;
@@ -32,8 +34,6 @@
     BlinkMacSystemFont,
     "SF Pro Display",
     sans-serif;
-  color: var(--text);
-  background: var(--bg);
 }
 
 :root[data-theme="dark"] {
@@ -45,6 +45,7 @@
 
   --border: #1c2a3b;
   --border-strong: #36485e;
+  --border-focus: #22c55e;
 
   --text: #e5edf7;
   --muted: #91a1b6;
@@ -58,54 +59,45 @@
   --danger-border: #65303a;
 }
 
-h1,
-h2,
-h3 {
-  line-height: 1.2;
-  margin: 0;
-}
+@layer base {
+  html,
+  body,
+  #root {
+    min-height: 100%;
+  }
 
-* {
-  box-sizing: border-box;
-}
+  body {
+    @apply bg-(--bg) text-(--text);
 
-html,
-body,
-#root {
-  min-height: 100%;
-}
+    margin: 0;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition:
+      background-color 180ms ease,
+      color 180ms ease;
+  }
 
-body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.5;
-  letter-spacing: -0.01em;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  transition:
-    background-color 180ms ease,
-    color 180ms ease;
-}
+  * {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+  }
 
-* {
-  font-variant-numeric: tabular-nums;
-  font-feature-settings: "tnum";
-}
+  h1,
+  h2,
+  h3 {
+    line-height: 1.2;
+    margin: 0;
+  }
 
-img,
-svg {
-  display: block;
-  max-width: 100%;
-}
-
-button,
-input,
-select,
-textarea {
-  font: inherit;
-  transition:
-    background-color 180ms ease,
-    border-color 180ms ease,
-    color 180ms ease;
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+    transition:
+      background-color 180ms ease,
+      border-color 180ms ease,
+      color 180ms ease;
+  }
 }

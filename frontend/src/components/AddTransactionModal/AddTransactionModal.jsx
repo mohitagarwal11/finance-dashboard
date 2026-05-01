@@ -1,5 +1,9 @@
 import { useState } from "react";
-import "./AddTransactionModal.css";
+
+const fieldClass =
+  "w-full rounded-(--r-md) border border-(--border) bg-(--bg) px-3.5 py-[11px] text-sm text-(--text) outline-none focus:border-(--accent) focus:bg-(--surface) focus:outline-2 focus:outline-offset-2 focus:outline-(--accent)";
+const labelClass = "flex flex-col gap-1.5";
+const labelTextClass = "text-xs font-medium text-(--muted)";
 
 function AddTransactionModal({ onAdd, onClose, initialData, onEdit }) {
   const isEditMode = Boolean(initialData);
@@ -67,18 +71,23 @@ function AddTransactionModal({ onAdd, onClose, initialData, onEdit }) {
   // }, [initialData]);
 
   return (
-    <div className="modal-backdrop">
-      <div className="modal-card">
-        <div className="modal-card__header">
-          <h2>{isEditMode ? "Edit" : "Add"} Transaction</h2>
-          <p>{isEditMode ? "Update existing entry" : "Create a new transaction"}</p>
+    <div className="fixed inset-0 z-20 grid place-items-center bg-slate-900/40 p-4.5">
+      <div className="w-full max-w-130 rounded-(--r-xl) border border-(--border) bg-(--surface)">
+        <div className="px-5.5 pt-5.5 pb-2">
+          <h2 className="text-[22px] font-bold tracking-normal text-(--text)">
+            {isEditMode ? "Edit" : "Add"} Transaction
+          </h2>
+          <p className="mb-1 mt-0 text-[11px] font-semibold tracking-[0.07em] text-(--muted)">
+            {isEditMode ? "Update existing entry" : "Create a new transaction"}
+          </p>
         </div>
 
-        <form className="modal-form" onSubmit={handleSubmit}>
-          <div className="modal-form__grid">
-            <label>
-              <span>Title</span>
+        <form className="px-5.5 pt-3 pb-5.5" onSubmit={handleSubmit}>
+          <div className="grid grid-cols-2 gap-3.5 max-[704px]:grid-cols-1">
+            <label className={labelClass}>
+              <span className={labelTextClass}>Title</span>
               <input
+                className={fieldClass}
                 type="text"
                 placeholder="Title"
                 name="title"
@@ -87,9 +96,10 @@ function AddTransactionModal({ onAdd, onClose, initialData, onEdit }) {
               />
             </label>
 
-            <label>
-              <span>Amount</span>
+            <label className={labelClass}>
+              <span className={labelTextClass}>Amount</span>
               <input
+                className={fieldClass}
                 type="number"
                 placeholder="Amount"
                 name="amount"
@@ -98,9 +108,10 @@ function AddTransactionModal({ onAdd, onClose, initialData, onEdit }) {
               />
             </label>
 
-            <label>
-              <span>Type</span>
+            <label className={labelClass}>
+              <span className={labelTextClass}>Type</span>
               <select
+                className={fieldClass}
                 name="type"
                 value={form.type}
                 onChange={handleChange}
@@ -110,9 +121,10 @@ function AddTransactionModal({ onAdd, onClose, initialData, onEdit }) {
               </select>
             </label>
 
-            <label>
-              <span>Category</span>
+            <label className={labelClass}>
+              <span className={labelTextClass}>Category</span>
               <select
+                className={fieldClass}
                 name="category"
                 value={form.category}
                 onChange={handleChange}
@@ -127,9 +139,10 @@ function AddTransactionModal({ onAdd, onClose, initialData, onEdit }) {
               </select>
             </label>
 
-            <label className="modal-form__full">
-              <span>Date</span>
+            <label className={`${labelClass} col-span-full`}>
+              <span className={labelTextClass}>Date</span>
               <input
+                className={fieldClass}
                 type="date"
                 name="date"
                 value={form.date}
@@ -138,9 +151,18 @@ function AddTransactionModal({ onAdd, onClose, initialData, onEdit }) {
             </label>
           </div>
 
-          <div className="modal-form__actions">
-            <button type="submit">{isEditMode ? "Save" : "Add"} Transaction</button>
-            <button type="button" onClick={onClose}>
+          <div className="mt-4.5 flex justify-end gap-2.5 border-t border-(--border) pt-4.5 max-[704px]:flex-col">
+            <button
+              className="cursor-pointer rounded-(--r-md) border border-(--accent) bg-(--accent) px-5 py-2.5 text-sm font-semibold text-white"
+              type="submit"
+            >
+              {isEditMode ? "Save" : "Add"} Transaction
+            </button>
+            <button
+              className="cursor-pointer rounded-(--r-md) border border-(--border) bg-(--surface) px-5 py-2.5 text-sm font-semibold text-(--text)"
+              type="button"
+              onClick={onClose}
+            >
               Cancel
             </button>
           </div>
