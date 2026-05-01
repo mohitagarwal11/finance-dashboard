@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import TransactionItem from '../../components/TransactionItem/TransactionItem';
-import AddTransactionModal from '../../components/AddTransactionModal/AddTransactionModal';
-import Pagination from '../../components/Pagination/Pagination';
+import { useState } from "react";
+import TransactionItem from "../../components/TransactionItem/TransactionItem";
+import AddTransactionModal from "../../components/AddTransactionModal/AddTransactionModal";
+import Pagination from "../../components/Pagination/Pagination";
 
 const filterFieldClass =
   "w-full rounded-(--r-md) border border-(--border) bg-(--bg) px-3.5 py-2.5 text-[13px] text-(--text) hover:border-(--border-focus) focus:border-(--border-focus) focus:bg-(--surface)";
@@ -13,7 +13,7 @@ function TransactionsSection({
   role,
   handleAddTxn,
   handleDeleteTxn,
-  handleEditTxn
+  handleEditTxn,
 }) {
   // to keep track of the form modal state
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -27,12 +27,15 @@ function TransactionsSection({
   // applying all the filters together to get the final list to render
   const filteredTransactions = transactions.filter((txn) => {
     // using includes so that we can search by each letter instead of the whole word
-    const matchesSearch = txn.title.toLowerCase().includes(filters.search.toLowerCase());
+    const matchesSearch = txn.title
+      .toLowerCase()
+      .includes(filters.search.toLowerCase());
     const matchesCategory =
       filters.category == "all" ||
       txn.category.toLowerCase() == filters.category.toLowerCase();
     const matchesType =
-      filters.type == "all" || txn.type.toLowerCase() == filters.type.toLowerCase();
+      filters.type == "all" ||
+      txn.type.toLowerCase() == filters.type.toLowerCase();
     return matchesSearch && matchesCategory && matchesType;
   });
 
@@ -73,7 +76,9 @@ function TransactionsSection({
           <select
             className={filterFieldClass}
             value={filters.category}
-            onChange={(e) => setFilters({ ...filters, category: e.target.value })}
+            onChange={(e) =>
+              setFilters({ ...filters, category: e.target.value })
+            }
           >
             <option value="all">All Categories</option>
             <option value="food">Food</option>
@@ -110,7 +115,7 @@ function TransactionsSection({
       )}
 
       <div className="flex flex-col gap-2.5">
-        <div className="grid grid-cols-[minmax(0,1.6fr)_139px_99px_109px_119px] gap-3 px-3.5 text-[11px] font-semibold tracking-[0.05em] text-(--muted) max-[704px]:hidden">
+        <div className="grid grid-cols-[minmax(0,1.6fr)_139px_99px_109px_119px] gap-3 px-3.5 text-[11px] font-semibold tracking-wider text-(--muted) max-[704px]:hidden">
           <span>Title</span>
           <span>Amount</span>
           <span>Type</span>
@@ -134,8 +139,7 @@ function TransactionsSection({
               }}
               onDelete={handleDeleteTxn}
             />
-          )
-          )
+          ))
         )}
         <Pagination
           txnPerPage={txnPerPage}
