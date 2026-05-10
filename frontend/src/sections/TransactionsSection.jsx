@@ -39,7 +39,9 @@ function TransactionsSection({
     return matchesSearch && matchesCategory && matchesType;
   });
 
-  const indexOfLastTxn = currPage * txnPerPage;
+  const totalPages = Math.ceil(filteredTransactions.length / txnPerPage);
+  const visiblePage = Math.min(currPage, Math.max(totalPages, 1));
+  const indexOfLastTxn = visiblePage * txnPerPage;
   const indexOfFirstTxn = indexOfLastTxn - txnPerPage;
   const currTxns = filteredTransactions.slice(indexOfFirstTxn, indexOfLastTxn);
 
@@ -142,9 +144,9 @@ function TransactionsSection({
           ))
         )}
         <Pagination
-          txnPerPage={txnPerPage}
+          currPage={visiblePage}
           setCurrPage={setCurrPage}
-          totalTxn={filteredTransactions.length}
+          totalPages={totalPages}
         />
       </div>
     </section>
