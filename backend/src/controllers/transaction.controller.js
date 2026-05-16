@@ -43,7 +43,7 @@ const createTransaction = asyncHandler(async (req, res) => {
   }
 
   return res
-    .status(200)
+    .status(201)
     .json(new ApiResponse(201, newTxn, "Transaction created"));
 });
 

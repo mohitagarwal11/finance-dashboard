@@ -48,6 +48,11 @@ function AuthPage({ onAuthSuccess }) {
         setMessage("");
       }
 
+      if (trimmedForm.password.length < 8) {
+        setMessage("Password must be at least 8 characters long");
+        return;
+      }
+
       const payload =
         mode === "register"
           ? trimmedForm
