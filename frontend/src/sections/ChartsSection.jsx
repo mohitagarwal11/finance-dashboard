@@ -6,6 +6,10 @@ import {
   monthlyTotalsReducer,
   totalReducer,
 } from "../utils/reducers";
+import {
+  CATEGORY_COLORS,
+  DEFAULT_CATEGORY_COLOR,
+} from "../constants/categories";
 
 defaults.maintainAspectRatio = false;
 defaults.responsive = true;
@@ -24,15 +28,6 @@ function ChartsSection({ transactions }) {
   const monthlyValues = monthlyEntries.map(([, totals]) => totals);
   const categoryLabels = Object.keys(categoryTotals);
   const categoryValues = Object.values(categoryTotals);
-
-  const categoryColors = {
-    Food: "#f97316",
-    Transportation: "#3b82f6",
-    Utilities: "#facc15",
-    Rent: "#ef4444",
-    Entertainment: "#a855f7",
-    Investment: "#10b981",
-  };
 
   return (
     <section className="flex min-w-0 flex-col gap-4 rounded-(--r-lg) border border-(--border) bg-(--surface) p-5 max-[704px]:p-4">
@@ -102,10 +97,10 @@ function ChartsSection({ transactions }) {
                 {
                   data: categoryValues,
                   backgroundColor: categoryLabels.map(
-                    (label) => categoryColors[label],
+                    (label) => CATEGORY_COLORS[label] || DEFAULT_CATEGORY_COLOR,
                   ),
                   borderColor: categoryLabels.map(
-                    (label) => categoryColors[label],
+                    (label) => CATEGORY_COLORS[label] || DEFAULT_CATEGORY_COLOR,
                   ),
                   radius: "75%",
                   cutout: "60%",
