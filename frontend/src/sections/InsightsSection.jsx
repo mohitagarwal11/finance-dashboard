@@ -33,25 +33,29 @@ function InsightsSection({
   const sortedMonths = Object.keys(monthlyCategoryTotals).sort();
 
   const monthlyTotals = monthlyTotalsReducer(transactions);
+  const [selectedMonth, setSelectedMonth] = useState(null);
+  const latestMonth = sortedMonths[sortedMonths.length - 1] || "";
+  const activeMonth = sortedMonths.includes(selectedMonth)
+    ? selectedMonth
+    : latestMonth;
 
-  const [selectedMonth, setSelectedMonth] = useState(() => {
-    return sortedMonths.length > 0
-      ? sortedMonths[sortedMonths.length - 1]
-      : null;
-  });
+  const selectedTotals = monthlyTotals[activeMonth] || {
+    income: 0,
+    expense: 0,
+  };
 
   // const currentMonth = new Date().toISOString().slice(0, 7);
   const selectedMonthData = getHighestExpenseCategoryForMonth(
     monthlyCategoryTotals,
-    selectedMonth,
+    activeMonth,
   );
 
   const percentOver = (
-    ((monthlyTotals[selectedMonth].expense - expenseLimit) / expenseLimit) *
+    ((selectedTotals.expense - expenseLimit) / expenseLimit) *
     100
   ).toFixed(1);
   // const percentUnder = (
-  //   ((expenseLimit - monthlyTotals[selectedMonth].expense) / expenseLimit) *
+  //   ((expenseLimit - selectedTotals.expense) / expenseLimit) *
   //   100
   // ).toFixed(1);
 
@@ -84,7 +88,7 @@ function InsightsSection({
           ) : (
             <select
               className={compactFieldClass}
-              value={selectedMonth || ""}
+              value={activeMonth}
               onChange={(e) => setSelectedMonth(e.target.value)}
             >
               {sortedMonths.map((month) => (
@@ -103,18 +107,11 @@ function InsightsSection({
           <p className={eyebrowClass}>Monthly expense tracker</p>
         </div>
         <h3 className={headingClass}>Total Expense</h3>
-        <p className={valueClass}>
-          {formatCurrency(
-            monthlyTotals[selectedMonth]
-              ? monthlyTotals[selectedMonth].expense
-              : 0,
-          )}
-        </p>
+        <p className={valueClass}>{formatCurrency(selectedTotals.expense)}</p>
         <p className={captionClass}>
-          {monthlyTotals[selectedMonth] &&
-          monthlyTotals[selectedMonth].expense > expenseLimit
+          {selectedTotals.expense > expenseLimit
             ? `${percentOver}% over budget.`
-            : `Under budget, ${formatCurrency(expenseLimit - monthlyTotals[selectedMonth].expense)} still left.`}
+            : `Under budget, ${formatCurrency(expenseLimit - selectedTotals.expense)} still left.`}
         </p>
       </div>
 
@@ -132,8 +129,8 @@ function InsightsSection({
             : formatCurrency(0)}
         </p>
         <p className={captionClass}>
-          {selectedMonthData && monthlyTotals[selectedMonth]
-            ? `${((selectedMonthData.amount / monthlyTotals[selectedMonth].expense) * 100).toFixed(1)}% of your expense.`
+          {selectedMonthData && selectedTotals
+            ? `${((selectedMonthData.amount / selectedTotals.expense) * 100).toFixed(1)}% of your expense.`
             : "No expenses recorded for this month."}
         </p>
       </div>
@@ -143,20 +140,14 @@ function InsightsSection({
         <div className={cardHeaderClass}>
           <p className={eyebrowClass}>Monthly net savings</p>
         </div>
-        <h3 className={headingClass}>{formatMonthLabel(selectedMonth)}</h3>
+        <h3 className={headingClass}>{formatMonthLabel(activeMonth)}</h3>
         <p className={valueClass}>
-          {monthlyTotals[selectedMonth]
-            ? formatCurrency(
-                monthlyTotals[selectedMonth].income -
-                  monthlyTotals[selectedMonth].expense,
-              )
-            : formatCurrency(0)}
+          {formatCurrency(selectedTotals.income - selectedTotals.expense)}
         </p>
         <p className={captionClass}>
-          {selectedMonthData && monthlyTotals[selectedMonth]
+          {selectedMonthData && selectedTotals
             ? `${
-                monthlyTotals[selectedMonth].income >=
-                monthlyTotals[selectedMonth].expense
+                selectedTotals.income >= selectedTotals.expense
                   ? "You came out ahead this month."
                   : "Your expenses outran your income this month."
               }`

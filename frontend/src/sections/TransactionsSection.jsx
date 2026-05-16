@@ -2,6 +2,7 @@ import { useState } from "react";
 import TransactionItem from "../components/TransactionItem";
 import AddTransactionModal from "../components/AddTransactionModal";
 import Pagination from "../components/Pagination";
+import { ALL_CATEGORIES } from "../constants/categories";
 
 const filterFieldClass =
   "w-full rounded-(--r-md) border border-(--border) bg-(--bg) px-3.5 py-2.5 text-[13px] text-(--text) hover:border-(--border-focus) focus:border-(--border-focus) focus:bg-(--surface)";
@@ -83,13 +84,11 @@ function TransactionsSection({
             }
           >
             <option value="all">All Categories</option>
-            <option value="food">Food</option>
-            <option value="rent">Rent</option>
-            <option value="transportation">Transportation</option>
-            <option value="utilities">Utilities</option>
-            <option value="entertainment">Entertainment</option>
-            <option value="salary">Salary</option>
-            <option value="investment">Investment</option>
+            {ALL_CATEGORIES.map((category) => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
           </select>
 
           <select
@@ -132,7 +131,7 @@ function TransactionsSection({
         ) : (
           currTxns.map((txn) => (
             <TransactionItem
-              key={txn.id}
+              key={txn._id}
               transaction={txn}
               role={role}
               onEdit={(txn) => {

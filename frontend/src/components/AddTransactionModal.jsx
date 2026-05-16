@@ -1,4 +1,8 @@
 import { useState } from "react";
+import {
+  EXPENSE_CATEGORIES,
+  INCOME_CATEGORIES,
+} from "../constants/categories";
 
 const fieldClass =
   "w-full rounded-(--r-md) border border-(--border) bg-(--bg) px-3.5 py-[11px] text-sm text-(--text) outline-none focus:border-(--accent) focus:bg-(--surface) focus:outline-2 focus:outline-offset-2 focus:outline-(--accent)";
@@ -11,16 +15,38 @@ function AddTransactionModal({ onAdd, onClose, initialData, onEdit }) {
   const initialState = {
     title: "",
     amount: "",
-    type: "",
-    category: "",
+    type: "expense",
+    category: EXPENSE_CATEGORIES[0],
     date: "",
   };
 
-  const [form, setForm] = useState(initialData || initialState);
+  const getInitialForm = () =>
+    initialData
+      ? {
+          title: initialData.title,
+          amount: initialData.amount,
+          type: initialData.type,
+          category: initialData.category,
+          date: initialData.date?.slice(0, 10) || "",
+        }
+      : initialState;
+
+  const [form, setForm] = useState(getInitialForm);
 
   // handles any change made to the form and updates the form state accordingly
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    if (name === "type") {
+      const categories =
+        value === "income" ? INCOME_CATEGORIES : EXPENSE_CATEGORIES;
+      setForm((prev) => ({
+        ...prev,
+        type: value,
+        category: categories[0],
+      }));
+      return;
+    }
 
     setForm((prev) => ({
       ...prev,
@@ -29,10 +55,16 @@ function AddTransactionModal({ onAdd, onClose, initialData, onEdit }) {
   };
 
   // handles submit form with validation
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // validation check needs btr ui
-    if (!form.title || !form.amount || !form.category || !form.date) {
+    if (
+      !form.title ||
+      !form.amount ||
+      !form.type ||
+      !form.category ||
+      !form.date
+    ) {
       alert("Please fill all the fields");
       return;
     }
@@ -42,8 +74,7 @@ function AddTransactionModal({ onAdd, onClose, initialData, onEdit }) {
       return;
     }
 
-    const newTxn = {
-      id: initialData?.id || `txn_${Date.now()}`,
+    const transactionData = {
       title: form.title.trim(),
       amount: Number(form.amount),
       type: form.type,
@@ -51,13 +82,18 @@ function AddTransactionModal({ onAdd, onClose, initialData, onEdit }) {
       date: form.date,
     };
 
-    if (initialData) {
-      onEdit(newTxn);
-    } else {
-      onAdd(newTxn);
+    try {
+      if (initialData) {
+        await onEdit(initialData._id, transactionData);
+      } else {
+        await onAdd(transactionData);
+      }
+
+      onClose();
+      setForm(initialState);
+    } catch (error) {
+      alert(error.response?.data?.message || "Transaction save failed");
     }
-    onClose();
-    setForm(initialState);
   };
 
   // to update the form data if edit is clicked for other txn without closing the modal
@@ -69,6 +105,12 @@ function AddTransactionModal({ onAdd, onClose, initialData, onEdit }) {
   //     setForm(initialState);
   //   }
   // }, [initialData]);
+
+  const baseCategoryOptions =
+    form.type === "income" ? INCOME_CATEGORIES : EXPENSE_CATEGORIES;
+  const categoryOptions = baseCategoryOptions.includes(form.category)
+    ? baseCategoryOptions
+    : [...baseCategoryOptions, form.category].filter(Boolean);
 
   return (
     <div className="fixed inset-0 z-20 grid place-items-center bg-slate-900/40 p-4.5">
@@ -129,13 +171,11 @@ function AddTransactionModal({ onAdd, onClose, initialData, onEdit }) {
                 value={form.category}
                 onChange={handleChange}
               >
-                <option value="Food">Food</option>
-                <option value="Rent">Rent</option>
-                <option value="Transportation">Transportation</option>
-                <option value="Utilities">Utilities</option>
-                <option value="Entertainment">Entertainment</option>
-                <option value="Salary">Salary</option>
-                <option value="Investment">Investment</option>
+                {categoryOptions.map((category) => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
+                ))}
               </select>
             </label>
 

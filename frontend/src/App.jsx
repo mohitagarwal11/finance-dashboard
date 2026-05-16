@@ -1,70 +1,120 @@
-import { useEffect, useState } from "react";
-import { initialTransactions } from "./data/transactions";
+import { useCallback, useEffect, useState } from "react";
 
 import SummarySection from "./sections/SummarySection";
 import TransactionsSection from "./sections/TransactionsSection";
 import InsightsSection from "./sections/InsightsSection";
 import ChartsSection from "./sections/ChartsSection";
-
+import AuthPage from "./pages/AuthPage";
 import RoleSwitcher from "./components/RoleSwitcher";
 
-function getInitialTheme() {
-  const storedTheme = localStorage.getItem("theme");
-
-  if (storedTheme === "light" || storedTheme === "dark") {
-    return storedTheme;
-  }
-}
+import { logoutUser } from "./api/auth";
+import { setAuthExpiredHandler } from "./api/client";
+import {
+  createTransaction,
+  deleteTransaction,
+  getTransactions,
+  updateTransaction,
+} from "./api/transactions";
 
 function App() {
-  // if localstorage has data it parses it otherwise uses mock data from the transactions.js file
-  const [transactions, setTransactions] = useState(() => {
-    const data = localStorage.getItem("transactions");
-    return data ? JSON.parse(data) : initialTransactions;
+  const [userData, setUserData] = useState(() => {
+    const savedUser = localStorage.getItem("userData");
+    return savedUser ? JSON.parse(savedUser) : null;
   });
 
+  const [transactions, setTransactions] = useState([]);
   const [role, setRole] = useState("user");
-  const [theme, setTheme] = useState(getInitialTheme);
+
+  const [theme, setTheme] = useState(
+    document.documentElement.dataset.theme || "light",
+  );
+
   const [filters, setFilters] = useState({
     search: "",
     category: "all",
     type: "all",
   });
+  const [expenseLimit, setExpenseLimit] = useState(3000);
 
-  const [expenseLimit, setExpenseLimit] = useState(() => {
-    const data = localStorage.getItem("expenseLimit");
-    return data ? data : 3000;
-  });
+  const handleAuthSuccess = (response) => {
+    setUserData(response.data);
+    localStorage.setItem("userData", JSON.stringify(response.data));
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logoutUser();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      localStorage.removeItem("userData");
+      setUserData(null);
+      setTransactions([]);
+    }
+  };
+
+  const fetchTransactions = useCallback(async () => {
+    const response = await getTransactions();
+    setTransactions(response.data.data);
+  }, []);
+
+  const handleAddTxn = async (transactionData) => {
+    try {
+      await createTransaction(transactionData);
+      await fetchTransactions();
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
+
+  const handleEditTxn = async (transactionId, transactionData) => {
+    try {
+      await updateTransaction(transactionId, transactionData);
+      await fetchTransactions();
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
+
+  const handleDeleteTxn = async (transactionId) => {
+    try {
+      await deleteTransaction(transactionId);
+      await fetchTransactions();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
-    localStorage.setItem("transactions", JSON.stringify(transactions));
-    localStorage.setItem("expenseLimit", expenseLimit);
-  }, [transactions, expenseLimit]);
+    if (!userData) return;
+
+    fetchTransactions().catch((error) => {
+      console.log(error);
+    });
+  }, [fetchTransactions, userData]);
+
+  useEffect(() => {
+    const handleExpiredAuth = () => {
+      localStorage.removeItem("userData");
+      setUserData(null);
+      setTransactions([]);
+    };
+
+    setAuthExpiredHandler(handleExpiredAuth);
+
+    return () => {
+      setAuthExpiredHandler(() => {});
+    };
+  }, []);
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
     localStorage.setItem("theme", theme);
   }, [theme]);
 
-  // crud operation handlers
-  const handleAddTxn = (newTxn) => {
-    setTransactions((prev) => [newTxn, ...prev]);
-    console.log("New Transaction Added:", newTxn);
-  };
-
-  const handleDeleteTxn = (txnId) => {
-    setTransactions((prev) => prev.filter((txn) => txn.id !== txnId));
-    console.log("Delete Transaction button clicked for:", txnId);
-  };
-
-  const handleEditTxn = (updatedTxn) => {
-    setTransactions((prev) =>
-      prev.map((txn) => (txn.id == updatedTxn.id ? updatedTxn : txn)),
-    );
-    console.log("Edit Transaction button clicked for:", updatedTxn.id);
-  };
-
-  return (
+  return userData ? (
     <div className="min-h-dvh w-full px-[clamp(15px,3vw,35px)] py-6 pb-9 max-[792px]:px-2 max-[792px]:pt-3 max-[792px]:pb-6">
       <div className="mx-auto flex w-full max-w-356 flex-col gap-3.5 rounded-(--r-xl) border border-(--border-strong) bg-(--shell) p-5 transition-colors duration-180 max-[792px]:gap-3 max-[792px]:rounded-(--r-lg) max-[792px]:p-3.5">
         <header className="flex items-center justify-between gap-4 border-b border-(--border-strong) px-1 pt-2 pb-5 max-[792px]:flex-col max-[792px]:items-start max-[792px]:px-0 max-[792px]:pt-1 max-[792px]:pb-3.75">
@@ -77,7 +127,7 @@ function App() {
                 Personal account
               </p>
               <h1 className="text-[30px] font-semibold tracking-normal text-(--text) max-[792px]:text-[25px]">
-                Good morning, Mohit
+                Welcome, {userData?.user?.username || "User"}
               </h1>
             </div>
           </div>
@@ -95,6 +145,13 @@ function App() {
               {theme === "dark" ? "Light mode" : "Dark mode"}
             </button>
             <RoleSwitcher role={role} setRole={setRole} />
+            <button
+              className="cursor-pointer rounded-(--r-md) border border-(--danger-border) bg-(--danger-light) px-3.5 py-2 text-sm font-semibold text-(--danger-text) hover:border-(--danger-text) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--danger-text)"
+              type="button"
+              onClick={handleLogout}
+            >
+              Logout
+            </button>
           </div>
         </header>
 
@@ -125,6 +182,8 @@ function App() {
         />
       </div>
     </div>
+  ) : (
+    <AuthPage onAuthSuccess={handleAuthSuccess} />
   );
 }
 

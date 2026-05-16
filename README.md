@@ -1,6 +1,6 @@
 # FinMo
 
-A responsive personal finance dashboard built for an internship assignment. The app helps users review income and expenses, inspect spending patterns through charts, track monthly limits, and manage transactions through a simple role-based interface.
+A responsive full-stack personal finance dashboard. FinMo helps users review income and expenses, inspect spending patterns through charts, track monthly limits, and manage transactions from an authenticated account.
 
 ## Deployed Build
 
@@ -22,7 +22,7 @@ Live Demo: https://finmo-beryl.vercel.app/
 
 ## Overview
 
-This project is a frontend-only finance dashboard created with React and Vite. It ships with mock transaction data and stores user changes in the browser using `localStorage`, so the dashboard feels interactive without requiring a backend.
+FinMo is built with a React/Vite frontend and an Express/MongoDB backend. Users can register, log in, and manage their own transaction data. Authentication uses HTTP-only cookies with access and refresh tokens, and protected transaction routes are scoped to the logged-in user.
 
 The interface is organized around a few core workflows:
 
@@ -30,10 +30,13 @@ The interface is organized around a few core workflows:
 - exploring monthly trends and category-wise spending with charts
 - monitoring budget usage and monthly savings through quick insights
 - searching, filtering, adding, editing, and deleting transactions
-- switching between `user` and `admin` modes to change available actions
+- switching between `user` and `admin` modes to change available dashboard actions
 
 ## Features
 
+- User registration and login
+- Cookie-based authentication with access token refresh handling
+- MongoDB-backed transaction storage
 - Summary cards for net balance, total income, and total expenses
 - Interactive charts powered by Chart.js for:
   - monthly income vs expense trends(Line Chart)
@@ -47,28 +50,25 @@ The interface is organized around a few core workflows:
   - search by title
   - category
   - transaction type
-- Admin-only transaction management:
+- Admin-mode transaction management:
   - add new transactions
   - edit existing transactions
   - delete transactions
   - update the expense limit(Insights section)
-- User/Admin mode switcher to simulate different access levels
+- User/Admin mode switcher for permission-aware UI behavior
 - Theme toggle with persisted light/dark preference
-- Persistent state using `localStorage` for:
-  - transactions
-  - expense limit
-  - selected theme
-- Preloaded mock dataset covering multiple months for immediate charting and testing
 
 ## Tech Stack
 
-| Layer               | Technology                          |
-| ------------------- | ----------------------------------- |
-| Frontend            | React                               |
-| Build Tool          | Vite                                |
-| Charts              | Chart.js, `react-chartjs-2`         |
-| Styling             | Tailwind CSS                        |
-| State & Persistence | React hooks, browser `localStorage` |
+| Layer          | Technology                         |
+| -------------- | ---------------------------------- |
+| Frontend       | React, Vite                        |
+| Styling        | Tailwind CSS                       |
+| Charts         | Chart.js, `react-chartjs-2`        |
+| API            | Express                            |
+| Database       | MongoDB, Mongoose                  |
+| Auth           | JWT, HTTP-only cookies, bcrypt     |
+| Client API     | Axios                              |
 
 ## Getting Started
 
@@ -78,22 +78,53 @@ Make sure the following are installed:
 
 - Node.js `18+` recommended
 - npm
+- A MongoDB connection string
 
 ### Installation
 
-Clone the repository and install dependencies inside the frontend app:
+Clone the repository and install dependencies in both apps:
 
 ```bash
 git clone <your-repo-url>
-cd finance-dashboard/frontend
+cd finance-dashboard
+
+cd backend
+npm install
+
+cd ../frontend
 npm install
 ```
 
+### Backend Environment
+
+Create `backend/.env` with the required backend configuration:
+
+```env
+PORT=8000
+MONGODB_URL=<your-mongodb-connection-string>
+DB_NAME=finmo_db
+CORS_ORIGIN=http://localhost:5173
+ACCESS_TOKEN_SECRET=<your-access-token-secret>
+ACCESS_TOKEN_EXPIRY=1h
+REFRESH_TOKEN_SECRET=<your-refresh-token-secret>
+REFRESH_TOKEN_EXPIRY=30d
+```
+
+For deployment, set `CORS_ORIGIN` to the exact deployed frontend URL because the app uses credentialed cookie requests.
+
 ### Running Locally
 
-Start the development server:
+Start the backend:
 
 ```bash
+cd backend
+npm run dev
+```
+
+Start the frontend in a separate terminal:
+
+```bash
+cd frontend
 npm run dev
 ```
 
@@ -103,62 +134,87 @@ Vite will print a local URL, usually:
 http://localhost:5173
 ```
 
+The frontend dev server proxies `/api` requests to `http://localhost:8000`.
+
 ### Production Build
 
-Create an optimized production build:
+Create an optimized frontend build:
 
 ```bash
+cd frontend
 npm run build
 ```
 
+Start the backend in production mode:
+
+```bash
+cd backend
+npm start
+```
+
+## API Routes
+
+User routes are mounted under `/api/v1/users`:
+
+- `POST /register`
+- `POST /login`
+- `POST /logout`
+- `POST /refreshToken`
+
+Transaction routes are mounted under `/api/v1/transactions` and require authentication:
+
+- `GET /`
+- `POST /`
+- `GET /:id`
+- `PATCH /:id`
+- `DELETE /:id`
+
 ## How It Works
 
-The app loads a predefined mock transaction dataset on first launch. After that, any transactions you add or edit are stored in `localStorage`, allowing the dashboard to persist between refreshes in the same browser.
+After login or registration, the backend sets HTTP-only cookies for authentication. The frontend requests the user's transaction list from the API and refreshes the list after create, update, and delete actions.
 
-There is no backend or authentication layer in this version. The `user` and `admin` roles are UI modes meant to demonstrate permission-aware interactions:
+The frontend keeps a small amount of UI state in the browser, including the selected theme and the current logged-in user response for rendering. Transaction records are stored in MongoDB and are associated with the authenticated user.
+
+The `user` and `admin` roles are currently UI modes:
 
 - `user` can browse summaries, charts, insights, and transactions
 - `admin` can additionally add, edit, delete transactions, and update the monthly expense limit
 
 ## Project Structure
 
-Components and dashboard sections are kept as flat `.jsx` files because each one currently has a single implementation file. Shared data and calculation/formatting helpers live in dedicated `data` and `utils` folders.
-
 ```text
 finance-dashboard/
-\-- frontend/
-    |-- index.html
-    |-- package.json
-    |-- vite.config.js
-    \-- src/
-        |-- App.jsx
-        |-- main.jsx
-        |-- index.css
-        |-- data/
-        |   \-- transactions.js
-        |-- utils/
-        |   |-- formatters.js
-        |   \-- reducers.js
-        |-- components/
-        |   |-- AddTransactionModal.jsx
-        |   |-- Pagination.jsx
-        |   |-- RoleSwitcher.jsx
-        |   |-- SummaryCard.jsx
-        |   \-- TransactionItem.jsx
-        \-- sections/
-            |-- ChartsSection.jsx
-            |-- InsightsSection.jsx
-            |-- SummarySection.jsx
-            \-- TransactionsSection.jsx
+|-- backend/
+|   |-- package.json
+|   \-- src/
+|       |-- app.js
+|       |-- server.js
+|       |-- controllers/
+|       |-- db/
+|       |-- middlewares/
+|       |-- models/
+|       |-- routes/
+|       |-- utils/
+|       \-- data/
+|-- frontend/
+|   |-- index.html
+|   |-- package.json
+|   |-- vite.config.js
+|   \-- src/
+|       |-- App.jsx
+|       |-- main.jsx
+|       |-- index.css
+|       |-- api/
+|       |-- components/
+|       |-- constants/
+|       |-- pages/
+|       |-- sections/
+|       \-- utils/
+\-- assets/
 ```
 
 ## Notes
 
-- Currency values are formatted in Indian Rupees (`INR`)
-- The starter dataset includes historical mock transactions across several months
-- Clearing browser storage will reset the app back to its initial mock data state
-- Component styling is handled with Tailwind utility classes in JSX, while `index.css` keeps the Tailwind import and global theme variables
-
-## Acknowledgements
-
-Built as a part of an internship assignment.
+- Currency values are formatted in Indian Rupees(`INR`).
+- The backend sets secure cookies, so production should be served over HTTPS.
+- Component styling is handled with Tailwind utility classes in JSX, while `index.css` keeps the Tailwind import and global theme variables.
