@@ -20,7 +20,18 @@ function AddTransactionModal({ onAdd, onClose, initialData, onEdit }) {
     date: "",
   };
 
-  const [form, setForm] = useState(initialData || initialState);
+  const getInitialForm = () =>
+    initialData
+      ? {
+          title: initialData.title,
+          amount: initialData.amount,
+          type: initialData.type,
+          category: initialData.category,
+          date: initialData.date?.slice(0, 10) || "",
+        }
+      : initialState;
+
+  const [form, setForm] = useState(getInitialForm);
 
   // handles any change made to the form and updates the form state accordingly
   const handleChange = (e) => {
@@ -44,7 +55,7 @@ function AddTransactionModal({ onAdd, onClose, initialData, onEdit }) {
   };
 
   // handles submit form with validation
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // validation check needs btr ui
     if (
@@ -63,8 +74,7 @@ function AddTransactionModal({ onAdd, onClose, initialData, onEdit }) {
       return;
     }
 
-    const newTxn = {
-      id: initialData?.id || `txn_${Date.now()}`,
+    const transactionData = {
       title: form.title.trim(),
       amount: Number(form.amount),
       type: form.type,
@@ -72,13 +82,18 @@ function AddTransactionModal({ onAdd, onClose, initialData, onEdit }) {
       date: form.date,
     };
 
-    if (initialData) {
-      onEdit(newTxn);
-    } else {
-      onAdd(newTxn);
+    try {
+      if (initialData) {
+        await onEdit(initialData._id, transactionData);
+      } else {
+        await onAdd(transactionData);
+      }
+
+      onClose();
+      setForm(initialState);
+    } catch (error) {
+      alert(error.response?.data?.message || "Transaction save failed");
     }
-    onClose();
-    setForm(initialState);
   };
 
   // to update the form data if edit is clicked for other txn without closing the modal

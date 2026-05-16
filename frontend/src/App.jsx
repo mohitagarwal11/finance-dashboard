@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import SummarySection from "./sections/SummarySection";
 import TransactionsSection from "./sections/TransactionsSection";
@@ -7,7 +7,13 @@ import ChartsSection from "./sections/ChartsSection";
 import AuthPage from "./pages/AuthPage";
 import RoleSwitcher from "./components/RoleSwitcher";
 
-import axios from "axios";
+import { logoutUser } from "./api/auth";
+import {
+  createTransaction,
+  deleteTransaction,
+  getTransactions,
+  updateTransaction,
+} from "./api/transactions";
 
 function App() {
   const [userData, setUserData] = useState(() => {
@@ -36,7 +42,7 @@ function App() {
 
   const handleLogout = async () => {
     try {
-      await axios.post("/api/v1/users/logout");
+      await logoutUser();
     } catch (error) {
       console.log(error);
     } finally {
@@ -46,19 +52,47 @@ function App() {
     }
   };
 
-  // get temp data for test
+  const fetchTransactions = useCallback(async () => {
+    const response = await getTransactions();
+    setTransactions(response.data.data);
+  }, []);
+
+  const handleAddTxn = async (transactionData) => {
+    try {
+      await createTransaction(transactionData);
+      await fetchTransactions();
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
+
+  const handleEditTxn = async (transactionId, transactionData) => {
+    try {
+      await updateTransaction(transactionId, transactionData);
+      await fetchTransactions();
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
+
+  const handleDeleteTxn = async (transactionId) => {
+    try {
+      await deleteTransaction(transactionId);
+      await fetchTransactions();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     if (!userData) return;
 
-    axios
-      .get("/api/data")
-      .then((response) => {
-        setTransactions(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [userData]);
+    fetchTransactions().catch((error) => {
+      console.log(error);
+    });
+  }, [fetchTransactions, userData]);
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
@@ -127,9 +161,9 @@ function App() {
           filters={filters}
           setFilters={setFilters}
           role={role}
-          // handleAddTxn={handleAddTxn}
-          // handleDeleteTxn={handleDeleteTxn}
-          // handleEditTxn={handleEditTxn}
+          handleAddTxn={handleAddTxn}
+          handleDeleteTxn={handleDeleteTxn}
+          handleEditTxn={handleEditTxn}
         />
       </div>
     </div>

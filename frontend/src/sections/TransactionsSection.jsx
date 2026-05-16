@@ -131,7 +131,7 @@ function TransactionsSection({
         ) : (
           currTxns.map((txn) => (
             <TransactionItem
-              key={txn.id}
+              key={txn._id}
               transaction={txn}
               role={role}
               onEdit={(txn) => {

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import { loginUser, registerUser } from "../api/auth";
 
 // it has two modes - login and register
 function AuthPage({ onAuthSuccess }) {
@@ -29,9 +29,6 @@ function AuthPage({ onAuthSuccess }) {
     e.preventDefault();
 
     try {
-      const url =
-        mode === "register" ? "/api/v1/users/register" : "/api/v1/users/login";
-
       const trimmedForm = {
         ...form,
         username: form.username.trim(),
@@ -59,7 +56,11 @@ function AuthPage({ onAuthSuccess }) {
               password: trimmedForm.password,
             };
 
-      const response = await axios.post(url, payload);
+      const response =
+        mode === "register"
+          ? await registerUser(payload)
+          : await loginUser(payload);
+
       onAuthSuccess(response.data);
     } catch (error) {
       setMessage(error.response?.data?.message || "Something went wrong!");

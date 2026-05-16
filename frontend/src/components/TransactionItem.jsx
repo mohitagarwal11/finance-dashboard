@@ -36,7 +36,7 @@ function TransactionItem({ transaction, role, onEdit, onDelete }) {
           </button>
           <button
             className="cursor-pointer rounded-(--r-sm) border border-(--danger-border) bg-(--danger-light) px-3.5 py-1.75 text-[13px] font-medium text-(--danger-text) max-[704px]:flex-1"
-            onClick={() => onDelete(transaction.id)}
+            onClick={() => onDelete(transaction._id)}
           >
             Delete
           </button>
