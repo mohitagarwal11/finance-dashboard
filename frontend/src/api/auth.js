@@ -11,3 +11,7 @@ export function loginUser(credentials) {
 export function logoutUser() {
   return api.post("/users/logout");
 }
+
+export function refreshToken() {
+  return api.post("/users/refreshToken");
+}

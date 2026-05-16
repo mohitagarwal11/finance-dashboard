@@ -8,6 +8,7 @@ import AuthPage from "./pages/AuthPage";
 import RoleSwitcher from "./components/RoleSwitcher";
 
 import { logoutUser } from "./api/auth";
+import { setAuthExpiredHandler } from "./api/client";
 import {
   createTransaction,
   deleteTransaction,
@@ -93,6 +94,20 @@ function App() {
       console.log(error);
     });
   }, [fetchTransactions, userData]);
+
+  useEffect(() => {
+    const handleExpiredAuth = () => {
+      localStorage.removeItem("userData");
+      setUserData(null);
+      setTransactions([]);
+    };
+
+    setAuthExpiredHandler(handleExpiredAuth);
+
+    return () => {
+      setAuthExpiredHandler(() => {});
+    };
+  }, []);
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
