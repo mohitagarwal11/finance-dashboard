@@ -4,7 +4,6 @@
 import dotenv from "dotenv";
 import { app } from "./app.js";
 import connectDB from "./db/index.js";
-import { initialTransactions } from "./data/transactions.js";
 
 dotenv.config({ path: "./.env" });
 
@@ -23,13 +22,3 @@ connectDB()
   .catch((error) => {
     console.log("MongoDB connection error ", error);
   });
-
-// FOR TESTING PURPOSES ONLY, THIS ROUTE WILL BE DELETED LATER
-app.get("/", (req, res) => {
-  res.send("Server is running.");
-});
-
-// FOR TESTING PURPOSES ONLY, THIS ROUTE WILL BE DELETED LATER
-app.get("/api/data", (req, res) => {
-  res.json(initialTransactions);
-});
