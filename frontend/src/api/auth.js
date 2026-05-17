@@ -12,6 +12,6 @@ export function logoutUser() {
   return api.post("/users/logout");
 }
 
-export function refreshToken() {
-  return api.post("/users/refreshToken");
+export function refreshToken(refreshTokenValue) {
+  return api.post("/users/refreshToken", { refreshToken: refreshTokenValue });
 }
