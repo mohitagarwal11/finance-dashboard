@@ -10,6 +10,12 @@ import RoleSwitcher from "./components/RoleSwitcher";
 import { logoutUser } from "./api/auth";
 import { setAuthExpiredHandler } from "./api/client";
 import {
+  clearAuthStorage,
+  getStoredUser,
+  setAuthTokens,
+  setStoredUser,
+} from "./api/tokenStore";
+import {
   createTransaction,
   deleteTransaction,
   getTransactions,
@@ -17,10 +23,7 @@ import {
 } from "./api/transactions";
 
 function App() {
-  const [userData, setUserData] = useState(() => {
-    const savedUser = localStorage.getItem("userData");
-    return savedUser ? JSON.parse(savedUser) : null;
-  });
+  const [userData, setUserData] = useState(() => getStoredUser());
 
   const [transactions, setTransactions] = useState([]);
   const [role, setRole] = useState("user");
@@ -36,9 +39,12 @@ function App() {
   });
   const [expenseLimit, setExpenseLimit] = useState(3000);
 
-  const handleAuthSuccess = (response) => {
-    setUserData(response.data);
-    localStorage.setItem("userData", JSON.stringify(response.data));
+  const handleAuthSuccess = (responseData) => {
+    const authData = responseData.data;
+
+    setAuthTokens(authData);
+    setStoredUser(authData.user);
+    setUserData(authData.user);
   };
 
   const handleLogout = async () => {
@@ -47,7 +53,7 @@ function App() {
     } catch (error) {
       console.log(error);
     } finally {
-      localStorage.removeItem("userData");
+      clearAuthStorage();
       setUserData(null);
       setTransactions([]);
     }
@@ -97,7 +103,7 @@ function App() {
 
   useEffect(() => {
     const handleExpiredAuth = () => {
-      localStorage.removeItem("userData");
+      clearAuthStorage();
       setUserData(null);
       setTransactions([]);
     };
@@ -127,7 +133,7 @@ function App() {
                 Personal account
               </p>
               <h1 className="text-[30px] font-semibold tracking-normal text-(--text) max-[792px]:text-[25px]">
-                Welcome, {userData?.user?.username || "User"}
+                Welcome, {userData?.username || "User"}
               </h1>
             </div>
           </div>

@@ -22,7 +22,7 @@ Live Demo: https://finmo-beryl.vercel.app/
 
 ## Overview
 
-FinMo is built with a React/Vite frontend and an Express/MongoDB backend. Users can register, log in, and manage their own transaction data. Authentication uses HTTP-only cookies with access and refresh tokens, and protected transaction routes are scoped to the logged-in user.
+FinMo is built with a React/Vite frontend and an Express/MongoDB backend. Users can register, log in, and manage their own transaction data. Authentication uses JWT access tokens sent as Bearer headers, with refresh-token rotation and HTTP-only cookies kept as a backend fallback for same-site deployments in future.
 
 The interface is organized around a few core workflows:
 
@@ -35,7 +35,7 @@ The interface is organized around a few core workflows:
 ## Features
 
 - User registration and login
-- Cookie-based authentication with access token refresh handling
+- JWT Bearer authentication with refresh-token rotation
 - MongoDB-backed transaction storage
 - Summary cards for net balance, total income, and total expenses
 - Interactive charts powered by Chart.js for:
@@ -60,15 +60,15 @@ The interface is organized around a few core workflows:
 
 ## Tech Stack
 
-| Layer          | Technology                         |
-| -------------- | ---------------------------------- |
-| Frontend       | React, Vite                        |
-| Styling        | Tailwind CSS                       |
-| Charts         | Chart.js, `react-chartjs-2`        |
-| API            | Express                            |
-| Database       | MongoDB, Mongoose                  |
-| Auth           | JWT, HTTP-only cookies, bcrypt     |
-| Client API     | Axios                              |
+| Layer      | Technology                                  |
+| ---------- | ------------------------------------------- |
+| Frontend   | React, Vite                                 |
+| Styling    | Tailwind CSS                                |
+| Charts     | Chart.js, `react-chartjs-2`                 |
+| API        | Express                                     |
+| Database   | MongoDB, Mongoose                           |
+| Auth       | JWT Bearer tokens, fallback cookies, bcrypt |
+| Client API | Axios                                       |
 
 ## Getting Started
 
@@ -110,7 +110,7 @@ REFRESH_TOKEN_SECRET=<your-refresh-token-secret>
 REFRESH_TOKEN_EXPIRY=30d
 ```
 
-For deployment, set `CORS_ORIGIN` to the exact deployed frontend URL because the app uses credentialed cookie requests.
+For deployment, set `CORS_ORIGIN` to the exact deployed frontend URL. The frontend sends auth through `Authorization` headers, while the backend still supports cookies as a fallback.
 
 ### Running Locally
 
@@ -136,22 +136,6 @@ http://localhost:5173
 
 The frontend dev server proxies `/api` requests to `http://localhost:8000`.
 
-### Production Build
-
-Create an optimized frontend build:
-
-```bash
-cd frontend
-npm run build
-```
-
-Start the backend in production mode:
-
-```bash
-cd backend
-npm start
-```
-
 ## API Routes
 
 User routes are mounted under `/api/v1/users`:
@@ -171,9 +155,9 @@ Transaction routes are mounted under `/api/v1/transactions` and require authenti
 
 ## How It Works
 
-After login or registration, the backend sets HTTP-only cookies for authentication. The frontend requests the user's transaction list from the API and refreshes the list after create, update, and delete actions.
+After login or registration, the backend returns access and refresh tokens in JSON and also sets HTTP-only cookies for fallback compatibility. The frontend stores the tokens locally, sends the access token in the `Authorization` header, and refreshes the list after create, update, and delete actions.
 
-The frontend keeps a small amount of UI state in the browser, including the selected theme and the current logged-in user response for rendering. Transaction records are stored in MongoDB and are associated with the authenticated user.
+The frontend keeps a small amount of UI state in the browser, including the selected theme, auth tokens, and the current logged-in user for rendering. Transaction records are stored in MongoDB and are associated with the authenticated user.
 
 The `user` and `admin` roles are currently UI modes:
 

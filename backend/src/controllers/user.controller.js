@@ -71,7 +71,7 @@ const registerUser = asyncHandler(async (req, res) => {
     .json(
       new ApiResponse(
         201,
-        { user: createdUser },
+        { user: createdUser, accessToken, refreshToken },
         "User registered successfully",
       ),
     );
@@ -111,7 +111,9 @@ const loginUser = asyncHandler(async (req, res) => {
       new ApiResponse(
         200,
         {
-          user: user,
+          user,
+          accessToken,
+          refreshToken,
         },
         "User logged in successfully",
       ),
@@ -136,7 +138,7 @@ const logoutUser = asyncHandler(async (req, res) => {
 
 const refreshAccessToken = asyncHandler(async (req, res) => {
   const incomingRefreshToken =
-    req.cookies?.refreshToken || req.body.refreshToken;
+    req.body.refreshToken || req.cookies?.refreshToken;
 
   if (!incomingRefreshToken) {
     throw new ApiError(401, "Unauthorized request");
