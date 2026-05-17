@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { loginUser, registerUser } from "../api/auth";
 import dashboardPreview from "../../../assets/dashboard.png";
-import chartsPreview from "../../../assets/charts.png";
+import transactionsPreview from "../../../assets/transactions.png";
 
 const features = [
   {
@@ -28,7 +28,6 @@ const highlights = [
   "Transaction history",
 ];
 
-// it has two modes - login and register
 function AuthPage({ onAuthSuccess }) {
   const [mode, setMode] = useState("login");
   const [showPassword, setShowPassword] = useState(false);
@@ -102,41 +101,43 @@ function AuthPage({ onAuthSuccess }) {
   const isLogin = mode === "login";
 
   return (
-    <main className="min-h-dvh overflow-hidden bg-(--bg) px-4 py-4 text-(--text) sm:px-6 lg:px-8">
-      <div className="mx-auto grid min-h-[calc(100dvh-32px)] w-full max-w-360 grid-cols-[minmax(0,1fr)_minmax(380px,480px)] overflow-hidden rounded-(--r-xl) border border-(--border-strong) bg-(--shell) shadow-[0_24px_80px_rgba(15,23,42,0.14)] max-[980px]:grid-cols-1">
-        <section className="relative flex min-w-0 flex-col justify-between overflow-hidden px-[clamp(24px,5vw,72px)] py-[clamp(26px,5vw,56px)]">
+    <main className="min-h-dvh bg-(--bg) px-3 py-3 text-(--text) sm:px-5 sm:py-5 lg:px-8">
+      <div className="mx-auto grid min-h-[calc(100dvh-24px)] w-full max-w-340 grid-cols-[minmax(0,1fr)_minmax(340px,420px)] overflow-hidden rounded-(--r-xl) border border-(--border-strong) bg-(--shell) shadow-[0_24px_80px_rgba(15,23,42,0.14)] max-[1080px]:min-h-0 max-[1080px]:grid-cols-1 max-[640px]:border-0 max-[640px]:bg-transparent max-[640px]:shadow-none">
+        <section className="relative flex min-w-0 flex-col gap-10 overflow-hidden px-[clamp(18px,4vw,56px)] py-[clamp(24px,4vw,48px)] max-[1080px]:order-2 max-[640px]:mt-3 max-[640px]:gap-5 max-[640px]:rounded-(--r-xl) max-[640px]:border max-[640px]:border-(--border-strong) max-[640px]:bg-(--shell) max-[640px]:px-5 max-[640px]:py-5 max-[380px]:px-4 max-[380px]:py-4">
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_16%_12%,rgba(34,197,94,0.18),transparent_28%),radial-gradient(circle_at_86%_18%,rgba(59,130,246,0.16),transparent_30%)]" />
           <div className="relative z-10">
-            <div className="mb-14 flex items-center justify-between gap-4 max-[640px]:mb-9">
+            <div className="mb-10 flex items-center justify-between gap-4 max-[1080px]:mb-8 max-[640px]:hidden">
               <div className="flex items-center gap-3">
-                <div className="flex h-11 w-11 items-end justify-center gap-1 rounded-(--r-md) bg-(--accent) p-2.5 text-white shadow-[0_12px_24px_rgba(22,163,74,0.24)]">
+                <div className="flex h-11 w-11 shrink-0 items-end justify-center gap-1 rounded-(--r-md) bg-(--accent) p-2.5 text-white shadow-[0_12px_24px_rgba(22,163,74,0.24)]">
                   <span className="h-3 w-1.5 rounded-full bg-white/80" />
                   <span className="h-5 w-1.5 rounded-full bg-white" />
                   <span className="h-7 w-1.5 rounded-full bg-white/90" />
                 </div>
-                <p className="text-2xl font-bold text-(--text)">FinMo</p>
+                <p className="text-2xl font-bold text-(--text) max-[360px]:text-xl">
+                  FinMo
+                </p>
               </div>
             </div>
 
-            <div className="grid items-start gap-10 min-[1280px]:grid-cols-[minmax(340px,0.9fr)_minmax(380px,1.1fr)]">
+            <div className="grid items-start gap-8 min-[1280px]:grid-cols-[minmax(300px,0.9fr)_minmax(340px,1fr)] max-[1080px]:grid-cols-[minmax(0,1fr)_minmax(280px,420px)] max-[760px]:grid-cols-1 max-[640px]:gap-0">
               <div className="min-w-0">
-                <p className="mb-4 w-fit rounded-full border border-(--border) bg-(--surface)/80 px-3 py-1.5 text-xs font-bold text-(--accent)">
+                <p className="mb-4 w-fit max-w-full rounded-full border border-(--border) bg-(--surface)/80 px-3 py-1.5 text-xs font-bold text-(--accent) max-[640px]:mb-3">
                   Smart finance, better decisions
                 </p>
-                <h1 className="max-w-125 text-[clamp(2rem,2.75vw,4.75rem)] font-bold leading-[1.02] text-(--text)">
+                <h1 className="max-w-125 text-[clamp(2rem,3.5vw,3rem)] font-bold leading-[1.03] text-(--text) max-[640px]:text-[1.7rem] max-[420px]:text-[1.55rem]">
                   All your finances, one smart dashboard
                 </h1>
-                <p className="mt-6 max-w-132 text-lg leading-8 text-(--text-secondary) max-[640px]:text-base max-[640px]:leading-7">
+                <p className="mt-5 max-w-132 text-[1rem] leading-8 text-(--muted) max-[640px]:mt-3 max-[640px]:text-sm max-[640px]:leading-6">
                   FinMo brings transactions, spending trends, and practical
                   insights into one clean dashboard built for everyday money
                   decisions.
                 </p>
 
-                <div className="mt-8 flex flex-wrap gap-2.5">
+                <div className="mt-7 flex flex-wrap gap-2.5 max-[640px]:mt-4 max-[640px]:gap-2">
                   {highlights.map((item) => (
                     <span
                       key={item}
-                      className="rounded-full border border-(--border) bg-(--surface)/80 px-3.5 py-2 text-sm font-semibold text-(--text-secondary)"
+                      className="rounded-full border border-(--border) bg-(--surface)/80 px-3.5 py-2 text-sm font-semibold text-(--text-secondary) max-[640px]:px-3 max-[640px]:py-1.5 max-[640px]:text-xs"
                     >
                       {item}
                     </span>
@@ -144,39 +145,39 @@ function AuthPage({ onAuthSuccess }) {
                 </div>
               </div>
 
-              <div className="relative min-h-112 min-w-0 pt-2 max-[1279px]:hidden">
-                <div className="ml-auto w-full max-w-142 overflow-hidden rounded-(--r-xl) border border-(--border-strong) bg-(--surface) shadow-[0_28px_70px_rgba(15,23,42,0.18)]">
+              <div className="relative min-w-0 pt-2 max-[760px]:hidden min-[1280px]:min-h-112">
+                <div className="ml-auto w-full max-w-142 overflow-hidden rounded-(--r-xl) border border-(--border-strong) bg-(--surface) shadow-[0_28px_70px_rgba(15,23,42,0.18)] max-[1080px]:rounded-(--r-lg)">
                   <img
                     src={dashboardPreview}
                     alt="FinMo dashboard overview"
-                    className="block w-full object-cover object-top-left"
+                    className="block aspect-16/10 w-full object-cover object-top-left"
                   />
                 </div>
 
-                <div className="ml-auto w-full max-w-142 mt-6 overflow-hidden rounded-(--r-xl) border border-(--border-strong) bg-(--surface) shadow-[0_28px_70px_rgba(15,23,42,0.18)]">
+                <div className="mt-5 ml-auto w-full max-w-142 overflow-hidden rounded-(--r-xl) border border-(--border-strong) bg-(--surface) shadow-[0_28px_70px_rgba(15,23,42,0.18)] max-[1080px]:hidden">
                   <img
-                    src={chartsPreview}
-                    alt="FinMo chart analytics"
-                    className="block w-full object-cover object-top-left"
+                    src={transactionsPreview}
+                    alt="FinMo transactions view"
+                    className="block aspect-video w-full object-cover object-top-left"
                   />
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="relative z-10 mt-14 grid gap-4 min-[720px]:grid-cols-3">
+          <div className="relative z-10 grid gap-4 min-[720px]:grid-cols-3 max-[640px]:grid-cols-1 max-[520px]:gap-3">
             {features.map((feature) => (
               <article
                 key={feature.label}
-                className="rounded-(--r-lg) border border-(--border) bg-(--surface)/86 p-5 shadow-sm backdrop-blur"
+                className="rounded-(--r-lg) border border-(--border) bg-(--surface)/86 p-5 shadow-sm backdrop-blur max-[640px]:p-4"
               >
                 <span
-                  className={`mb-5 block h-9 w-9 rounded-(--r-sm) ${feature.tone}`}
+                  className={`mb-4 block h-9 w-9 rounded-(--r-sm) ${feature.tone} max-[640px]:mb-3 max-[640px]:h-7 max-[640px]:w-7`}
                 />
                 <h2 className="text-base font-bold text-(--text)">
                   {feature.label}
                 </h2>
-                <p className="mt-2 text-sm leading-6 text-(--muted)">
+                <p className="mt-2 text-sm leading-6 text-(--muted) max-[640px]:leading-5">
                   {feature.copy}
                 </p>
               </article>
@@ -184,27 +185,30 @@ function AuthPage({ onAuthSuccess }) {
           </div>
         </section>
 
-        <aside className="flex min-w-0 items-center justify-center border-l border-(--border-strong) bg-(--surface) px-[clamp(20px,4vw,56px)] py-10 max-[980px]:border-l-0 max-[980px]:border-t">
+        <aside className="flex min-w-0 items-start justify-center border-l border-(--border-strong) bg-(--surface) px-[clamp(16px,3.6vw,44px)] py-[clamp(36px,7vh,76px)] max-[1080px]:order-1 max-[1080px]:border-b max-[1080px]:border-l-0 max-[640px]:min-h-dvh max-[640px]:items-center max-[640px]:border-0 max-[640px]:bg-(--bg) max-[640px]:px-4 max-[640px]:py-4 max-[380px]:px-3 max-[380px]:py-3">
           <form
             onSubmit={handleSubmit}
-            className="w-full max-w-106 rounded-(--r-xl) border border-(--border-strong) bg-(--surface) p-7 shadow-[0_24px_70px_rgba(15,23,42,0.12)] max-[480px]:p-5"
+            className="w-full max-w-100 rounded-(--r-xl) border border-(--border-strong) bg-(--surface) p-6 shadow-[0_24px_70px_rgba(15,23,42,0.12)] max-[1080px]:max-w-108 max-[640px]:p-5 max-[380px]:p-4 max-[340px]:rounded-(--r-lg) max-[340px]:p-3.5"
           >
-            <div className="mb-7">
-              <h2 className="mt-2 text-3xl font-bold text-(--text)">
+            <div className="mb-5 max-[380px]:mb-4">
+              <div className="mb-5 hidden items-center gap-3 max-[640px]:flex max-[380px]:mb-4">
+                <div className="flex h-10 w-10 shrink-0 items-end justify-center gap-1 rounded-(--r-md) bg-(--accent) p-2 text-white shadow-[0_12px_24px_rgba(22,163,74,0.24)]">
+                  <span className="h-2.5 w-1.5 rounded-full bg-white/80" />
+                  <span className="h-4 w-1.5 rounded-full bg-white" />
+                  <span className="h-6 w-1.5 rounded-full bg-white/90" />
+                </div>
+                <p className="text-2xl font-bold text-(--text)">FinMo</p>
+              </div>
+              <h2 className="mt-2 text-2xl font-bold text-(--text) max-[420px]:text-2xl max-[380px]:text-[1.45rem]">
                 {isLogin ? "Log in to FinMo" : "Create your account"}
               </h2>
-              <p className="mt-3 text-sm leading-6 text-(--muted)">
-                {isLogin
-                  ? "Pick up where you left off with your personal finance dashboard."
-                  : "Create a secure workspace for tracking your everyday money."}
-              </p>
             </div>
 
-            <div className="mb-5 grid grid-cols-2 rounded-(--r-md) border border-(--border) bg-(--bg) p-1">
+            <div className="mb-5 grid grid-cols-2 rounded-(--r-md) border border-(--border) bg-(--bg) p-1 max-[380px]:mb-4">
               <button
                 type="button"
                 onClick={() => setMode("login")}
-                className={`rounded-[10px] px-3 py-2.5 text-sm font-bold ${
+                className={`min-w-0 rounded-[10px] px-3 py-2.5 text-sm font-bold max-[380px]:py-2 ${
                   isLogin
                     ? "bg-(--surface) text-(--text) shadow-sm"
                     : "text-(--muted)"
@@ -215,7 +219,7 @@ function AuthPage({ onAuthSuccess }) {
               <button
                 type="button"
                 onClick={() => setMode("register")}
-                className={`rounded-[10px] px-3 py-2.5 text-sm font-bold ${
+                className={`min-w-0 rounded-[10px] px-3 py-2.5 text-sm font-bold max-[380px]:py-2 ${
                   !isLogin
                     ? "bg-(--surface) text-(--text) shadow-sm"
                     : "text-(--muted)"
@@ -225,7 +229,7 @@ function AuthPage({ onAuthSuccess }) {
               </button>
             </div>
 
-            <label className="mb-2 block text-sm font-bold text-(--text)">
+            <label className="mb-2 block text-sm font-bold text-(--text) max-[380px]:mb-1.5">
               Username
             </label>
             <input
@@ -234,12 +238,12 @@ function AuthPage({ onAuthSuccess }) {
               value={form.username}
               onChange={handleChange}
               autoComplete="username"
-              className="mb-4 w-full rounded-(--r-md) border border-(--border) bg-(--bg) px-4 py-3 text-(--text) outline-none focus:border-(--border-focus)"
+              className="mb-4 w-full min-w-0 rounded-(--r-md) border border-(--border) bg-(--bg) px-4 py-3 text-(--text) outline-none focus:border-(--border-focus) max-[380px]:mb-3 max-[380px]:py-2.5"
             />
 
             {!isLogin && (
               <>
-                <label className="mb-2 block text-sm font-bold text-(--text)">
+                <label className="mb-2 block text-sm font-bold text-(--text) max-[380px]:mb-1.5">
                   Email address
                 </label>
                 <input
@@ -249,15 +253,15 @@ function AuthPage({ onAuthSuccess }) {
                   value={form.email}
                   onChange={handleChange}
                   autoComplete="email"
-                  className="mb-4 w-full rounded-(--r-md) border border-(--border) bg-(--bg) px-4 py-3 text-(--text) outline-none focus:border-(--border-focus)"
+                  className="mb-4 w-full min-w-0 rounded-(--r-md) border border-(--border) bg-(--bg) px-4 py-3 text-(--text) outline-none focus:border-(--border-focus) max-[380px]:mb-3 max-[380px]:py-2.5"
                 />
               </>
             )}
 
-            <label className="mb-2 block text-sm font-bold text-(--text)">
+            <label className="mb-2 block text-sm font-bold text-(--text) max-[380px]:mb-1.5">
               Password
             </label>
-            <div className="mb-5 flex w-full items-center rounded-(--r-md) border border-(--border) bg-(--bg) focus-within:border-(--border-focus)">
+            <div className="mb-5 flex w-full items-center rounded-(--r-md) border border-(--border) bg-(--bg) focus-within:border-(--border-focus) max-[380px]:mb-4">
               <input
                 name="password"
                 type={showPassword ? "text" : "password"}
@@ -265,12 +269,12 @@ function AuthPage({ onAuthSuccess }) {
                 value={form.password}
                 onChange={handleChange}
                 autoComplete={isLogin ? "current-password" : "new-password"}
-                className="min-w-0 flex-1 bg-transparent px-4 py-3 text-(--text) outline-none"
+                className="min-w-0 flex-1 bg-transparent px-4 py-3 text-(--text) outline-none max-[380px]:py-2.5 max-[340px]:px-3"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword((current) => !current)}
-                className="px-4 py-3 text-sm font-bold text-(--accent)"
+                className="shrink-0 px-4 py-3 text-sm font-bold text-(--accent) max-[380px]:py-2.5 max-[340px]:px-3"
               >
                 {showPassword ? "Hide" : "Show"}
               </button>
@@ -278,7 +282,7 @@ function AuthPage({ onAuthSuccess }) {
 
             <button
               type="submit"
-              className="w-full rounded-(--r-md) bg-(--accent) px-4 py-3.5 font-bold text-white shadow-[0_14px_30px_rgba(22,163,74,0.24)] hover:brightness-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
+              className="w-full rounded-(--r-md) bg-(--accent) px-4 py-3.5 font-bold text-white shadow-[0_14px_30px_rgba(22,163,74,0.24)] hover:brightness-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent) max-[380px]:py-3"
             >
               {isLogin ? "Log in" : "Create account"}
             </button>
@@ -289,7 +293,7 @@ function AuthPage({ onAuthSuccess }) {
               </p>
             )}
 
-            <p className="mt-6 text-center text-sm text-(--muted)">
+            <p className="mt-5 text-center text-sm text-(--muted) max-[380px]:mt-4">
               {isLogin ? "New to FinMo?" : "Already using FinMo?"}{" "}
               <button
                 type="button"
