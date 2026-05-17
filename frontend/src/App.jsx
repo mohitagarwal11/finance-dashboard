@@ -28,9 +28,11 @@ function App() {
   const [transactions, setTransactions] = useState([]);
   const [role, setRole] = useState("user");
 
-  const [theme, setTheme] = useState(
-    document.documentElement.dataset.theme || "light",
-  );
+  const [theme, setTheme] = useState(() => {
+    return window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
+  });
 
   const [filters, setFilters] = useState({
     search: "",
@@ -117,8 +119,20 @@ function App() {
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
-    localStorage.setItem("theme", theme);
   }, [theme]);
+
+  useEffect(() => {
+    const themeQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const handleSystemThemeChange = (event) => {
+      setTheme(event.matches ? "dark" : "light");
+    };
+
+    themeQuery.addEventListener("change", handleSystemThemeChange);
+
+    return () => {
+      themeQuery.removeEventListener("change", handleSystemThemeChange);
+    };
+  }, []);
 
   return userData ? (
     <div className="min-h-dvh w-full px-[clamp(15px,3vw,35px)] py-6 pb-9 max-[792px]:px-2 max-[792px]:pt-3 max-[792px]:pb-6">
