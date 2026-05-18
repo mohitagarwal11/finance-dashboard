@@ -12,4 +12,4 @@ jobs:
     steps:
       - name: Ping Render Backend
         run: |
-          curl -X GET ${{ secrets.RENDER_BACKEND_URL }}/api/ping
+          curl -X GET "${{ secrets.RENDER_BACKEND_URL }}/api/ping"
