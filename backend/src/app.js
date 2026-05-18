@@ -41,4 +41,12 @@ app.use((err, req, res, next) => {
   });
 });
 
+// health check route to keep render server running
+app.get("/api/ping", (req, res) => {
+  return res.status(200).json({
+    success: true,
+    message: "Server is running",
+  });
+});
+
 export { app };
