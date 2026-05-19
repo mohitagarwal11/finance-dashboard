@@ -1,6 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { updateUserSettings } from "../api/auth";
 import { setStoredUser } from "../api/tokenStore";
+
+function getExpenseLimitValue(userData, expenseLimit) {
+  const parsedLimit = Number(userData?.expenseLimit ?? expenseLimit);
+  return Number.isFinite(parsedLimit) ? parsedLimit : 0;
+}
 
 function SettingsPage({
   userData,
@@ -8,25 +14,53 @@ function SettingsPage({
   expenseLimit,
   setExpenseLimit,
 }) {
-  const [name, setName] = useState(userData?.name || userData?.username || "");
-  const [limit, setLimit] = useState(expenseLimit || 0);
+  const [displayName, setDisplayName] = useState(
+    userData?.displayName || userData?.name || userData?.username || "",
+  );
+  const [limit, setLimit] = useState(() =>
+    getExpenseLimitValue(userData, expenseLimit),
+  );
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    setDisplayName(
+      userData?.displayName || userData?.name || userData?.username || "",
+    );
+    setLimit(getExpenseLimitValue(userData, expenseLimit));
+  }, [expenseLimit, userData]);
+
   const handleSave = async (e) => {
     e.preventDefault();
+
+    const parsedLimit = Number(limit);
+
+    if (!Number.isFinite(parsedLimit) || parsedLimit < 0) {
+      setMessage("Expense limit must be a non-negative number.");
+      return;
+    }
+
     setLoading(true);
     try {
-      // TODO: call API to save profile and expense limit
-      setExpenseLimit(Number(limit));
+      const response = await updateUserSettings({
+        displayName: displayName.trim(),
+        expenseLimit: parsedLimit,
+      });
+      const updatedUser = response.data?.data?.user || {
+        ...(userData || {}),
+        displayName: displayName.trim(),
+        expenseLimit: parsedLimit,
+      };
 
-      const updatedUser = { ...(userData || {}), name };
+      setExpenseLimit(Number(updatedUser.expenseLimit));
       setStoredUser(updatedUser);
       if (typeof setUserData === "function") setUserData(updatedUser);
 
       setMessage("Saved.");
     } catch (error) {
-      setMessage(error?.message || "Failed to save");
+      setMessage(
+        error.response?.data?.message || error?.message || "Failed to save",
+      );
     } finally {
       setLoading(false);
     }
@@ -38,16 +72,18 @@ function SettingsPage({
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-semibold">Settings</h2>
           <Link to="/dashboard" className="text-sm text-(--muted)">
-            ← Back to dashboard
+            Back to dashboard
           </Link>
         </div>
 
         <form onSubmit={handleSave} className="space-y-4">
           <div>
-            <label className="block text-sm font-bold mb-1">Name</label>
+            <label className="block text-sm font-bold mb-1">
+              Display name
+            </label>
             <input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={displayName}
+              onChange={(e) => setDisplayName(e.target.value)}
               className="w-full rounded-(--r-md) border px-3 py-2"
             />
           </div>
@@ -69,6 +105,7 @@ function SettingsPage({
               value={limit}
               onChange={(e) => setLimit(e.target.value)}
               type="number"
+              min="0"
               className="w-full rounded-(--r-md) border px-3 py-2"
             />
           </div>

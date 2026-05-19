@@ -1,15 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
 
-import SummarySection from "./sections/SummarySection";
-import TransactionsSection from "./sections/TransactionsSection";
-import InsightsSection from "./sections/InsightsSection";
-import ChartsSection from "./sections/ChartsSection";
 import AuthPage from "./pages/AuthPage";
 import SettingsPage from "./pages/SettingsPage";
 import DashboardPage from "./pages/DashboardPage";
-import { Routes, Route, Link, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
-import { logoutUser } from "./api/auth";
+import { getCurrentUser, logoutUser } from "./api/auth";
 import { setAuthExpiredHandler } from "./api/client";
 import {
   clearAuthStorage,
@@ -24,8 +20,18 @@ import {
   updateTransaction,
 } from "./api/transactions";
 
+const DEFAULT_EXPENSE_LIMIT = 3000;
+
+function getExpenseLimitFromUser(user) {
+  const expenseLimit = Number(user?.expenseLimit);
+  return Number.isFinite(expenseLimit) ? expenseLimit : DEFAULT_EXPENSE_LIMIT;
+}
+
 function App() {
   const [userData, setUserData] = useState(() => getStoredUser());
+  const [expenseLimit, setExpenseLimit] = useState(() =>
+    getExpenseLimitFromUser(getStoredUser()),
+  );
 
   const [transactions, setTransactions] = useState([]);
 
@@ -51,14 +57,18 @@ function App() {
     category: "all",
     type: "all",
   });
-  const [expenseLimit, setExpenseLimit] = useState(3000);
+
+  const syncUserData = useCallback((user) => {
+    setStoredUser(user);
+    setUserData(user);
+    setExpenseLimit(getExpenseLimitFromUser(user));
+  }, []);
 
   const handleAuthSuccess = (responseData) => {
     const authData = responseData.data;
 
     setAuthTokens(authData);
-    setStoredUser(authData.user);
-    setUserData(authData.user);
+    syncUserData(authData.user);
   };
 
   const handleLogout = async () => {
@@ -128,6 +138,31 @@ function App() {
 
     return () => controller.abort();
   }, [fetchTransactions, userData]);
+
+  useEffect(() => {
+    if (!userData?._id) return;
+
+    const controller = new AbortController();
+
+    const load = async () => {
+      try {
+        const response = await getCurrentUser({ signal: controller.signal });
+        const currentUser = response.data?.data?.user;
+
+        if (currentUser) {
+          syncUserData(currentUser);
+        }
+      } catch (error) {
+        if (error?.name === "CanceledError" || error?.code === "ERR_CANCELED")
+          return;
+        console.log(error);
+      }
+    };
+
+    void load();
+
+    return () => controller.abort();
+  }, [syncUserData, userData?._id]);
 
   useEffect(() => {
     const handleExpiredAuth = () => {

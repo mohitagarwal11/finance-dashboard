@@ -178,4 +178,65 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     );
 });
 
-export { registerUser, loginUser, logoutUser, refreshAccessToken };
+const getCurrentUser = asyncHandler(async (req, res) => {
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(200, { user: req.user }, "User fetched successfully"),
+    );
+});
+
+const updateUserSettings = asyncHandler(async (req, res) => {
+  const { displayName, expenseLimit } = req.body;
+  const updates = {};
+
+  if (displayName !== undefined) {
+    if (typeof displayName !== "string") {
+      throw new ApiError(400, "Display name must be a string");
+    }
+
+    updates.displayName = displayName.trim();
+  }
+
+  if (expenseLimit !== undefined) {
+    const parsedExpenseLimit = Number(expenseLimit);
+
+    if (!Number.isFinite(parsedExpenseLimit) || parsedExpenseLimit < 0) {
+      throw new ApiError(400, "Expense limit must be a non-negative number");
+    }
+
+    updates.expenseLimit = parsedExpenseLimit;
+  }
+
+  if (!Object.keys(updates).length) {
+    throw new ApiError(400, "No settings provided to update");
+  }
+
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      $set: updates,
+    },
+    {
+      returnDocument: "after",
+      runValidators: true,
+    },
+  ).select("-password -refreshToken");
+
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, { user }, "Settings updated successfully"));
+});
+
+export {
+  registerUser,
+  loginUser,
+  logoutUser,
+  refreshAccessToken,
+  getCurrentUser,
+  updateUserSettings,
+};

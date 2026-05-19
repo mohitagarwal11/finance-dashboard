@@ -66,7 +66,7 @@ const updateTransaction = asyncHandler(async (req, res) => {
       },
     },
     {
-      new: true,
+      returnDocument: "after",
     },
   );
 

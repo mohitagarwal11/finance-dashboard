@@ -24,6 +24,15 @@ const userSchema = new mongoose.Schema(
       required: true,
       minlength: 8,
     },
+    displayName: {
+      type: String,
+      trim: true,
+    },
+    expenseLimit: {
+      type: Number,
+      min: 0,
+      default: 3000,
+    },
     refreshToken: {
       type: String,
     },

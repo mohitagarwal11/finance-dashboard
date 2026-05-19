@@ -26,6 +26,9 @@ const captionClass =
 function InsightsSection({ transactions, expenseLimit }) {
   const monthlyCategoryTotals = monthlyCategoryTotalsReducer(transactions);
   const sortedMonths = Object.keys(monthlyCategoryTotals).sort();
+  const monthlyExpenseLimit = Number(expenseLimit);
+  const hasExpenseLimit =
+    Number.isFinite(monthlyExpenseLimit) && monthlyExpenseLimit > 0;
 
   const monthlyTotals = monthlyTotalsReducer(transactions);
   const [selectedMonth, setSelectedMonth] = useState(null);
@@ -45,10 +48,18 @@ function InsightsSection({ transactions, expenseLimit }) {
     activeMonth,
   );
 
-  const percentOver = (
-    ((selectedTotals.expense - expenseLimit) / expenseLimit) *
-    100
-  ).toFixed(1);
+  const percentOver = hasExpenseLimit
+    ? (
+        ((selectedTotals.expense - monthlyExpenseLimit) /
+          monthlyExpenseLimit) *
+        100
+      ).toFixed(1)
+    : "0.0";
+  const limitCaption = !hasExpenseLimit
+    ? "Set a monthly expense limit in settings."
+    : selectedTotals.expense > monthlyExpenseLimit
+      ? `${percentOver}% over budget.`
+      : `Under budget, ${formatCurrency(monthlyExpenseLimit - selectedTotals.expense)} still left.`;
   // const percentUnder = (
   //   ((expenseLimit - selectedTotals.expense) / expenseLimit) *
   //   100
@@ -85,9 +96,7 @@ function InsightsSection({ transactions, expenseLimit }) {
         <h3 className={headingClass}>Total Expense</h3>
         <p className={valueClass}>{formatCurrency(selectedTotals.expense)}</p>
         <p className={captionClass}>
-          {selectedTotals.expense > expenseLimit
-            ? `${percentOver}% over budget.`
-            : `Under budget, ${formatCurrency(expenseLimit - selectedTotals.expense)} still left.`}
+          {limitCaption}
         </p>
       </div>
 

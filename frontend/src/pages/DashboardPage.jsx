@@ -27,7 +27,8 @@ function DashboardPage({
   setExpenseLimit,
   handleLogout,
 }) {
-  const displayName = userData?.name || userData?.username || "User";
+  const displayName =
+    userData?.displayName || userData?.name || userData?.username || "User";
   const initials = getInitials(displayName);
 
   return (

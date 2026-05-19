@@ -15,3 +15,11 @@ export function logoutUser() {
 export function refreshToken(refreshTokenValue) {
   return api.post("/users/refreshToken", { refreshToken: refreshTokenValue });
 }
+
+export function getCurrentUser(config = {}) {
+  return api.get("/users/me", config);
+}
+
+export function updateUserSettings(settings) {
+  return api.patch("/users/settings", settings);
+}
