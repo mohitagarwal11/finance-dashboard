@@ -39,24 +39,30 @@
 :root[data-theme="dark"] {
   color-scheme: dark;
 
-  --bg: #09111a;
-  --shell: #0d1621;
-  --surface: #121c29;
+  /* Deep, muted blue-gray background for comfortable reading */
+  --bg: #071023;
+  --shell: #0b1320;
+  --surface: #0f1724;
 
-  --border: #1c2a3b;
-  --border-strong: #36485e;
-  --border-focus: #22c55e;
+  /* Soft translucent borders for subtle separation */
+  --border: rgba(255, 255, 255, 0.06);
+  --border-strong: rgba(255, 255, 255, 0.09);
+  --border-focus: #7c5cff;
 
-  --text: #e5edf7;
-  --muted: #91a1b6;
-  --text-secondary: #b2c0d3;
+  /* Light, slightly warm text to reduce glare */
+  --text: #e6eef8;
+  --muted: #9aa8bd;
+  --text-secondary: #b6c6d8;
 
-  --accent: #22c55e;
-  --green-strong: #4ade80;
+  /* Modern accents: primary violet and secondary teal */
+  --accent: #7c5cff;
+  --accent-2: #2dd4bf;
+  --green-strong: #34d399;
 
-  --danger-text: #f87171;
-  --danger-light: #31171d;
-  --danger-border: #65303a;
+  /* Danger tones kept but tuned for the dark background */
+  --danger-text: #fb7185;
+  --danger-light: #2b1115;
+  --danger-border: #7f1d1d;
 }
 
 @layer base {
