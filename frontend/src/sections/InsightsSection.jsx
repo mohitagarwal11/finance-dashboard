@@ -23,12 +23,7 @@ const valueClass =
 const captionClass =
   "mt-1 mb-0 text-xs text-(--muted) [overflow-wrap:anywhere]";
 
-function InsightsSection({
-  transactions,
-  expenseLimit,
-  setExpenseLimit,
-  role,
-}) {
+function InsightsSection({ transactions, expenseLimit }) {
   const monthlyCategoryTotals = monthlyCategoryTotalsReducer(transactions);
   const sortedMonths = Object.keys(monthlyCategoryTotals).sort();
 
@@ -64,40 +59,21 @@ function InsightsSection({
       <div className={toolbarClass}>
         <div className="min-w-0">
           <p className={eyebrowClass}>Insights</p>
-          <h2 className={headingClass}>
-            {role === "admin" ? "Expense limit" : "Monthly view"}
-          </h2>
+          <h2 className={headingClass}>Monthly view</h2>
         </div>
 
         <div className={headerControlClass}>
-          {role === "admin" ? (
-            <input
-              className={compactFieldClass}
-              type="number"
-              value={expenseLimit ?? ""}
-              inputMode="decimal"
-              onChange={(e) => {
-                const val = e.target.value;
-                if (val === "") {
-                  setExpenseLimit("");
-                  return;
-                }
-                setExpenseLimit(parseFloat(val));
-              }}
-            />
-          ) : (
-            <select
-              className={compactFieldClass}
-              value={activeMonth}
-              onChange={(e) => setSelectedMonth(e.target.value)}
-            >
-              {sortedMonths.map((month) => (
-                <option key={month} value={month}>
-                  {formatMonthLabel(month)}
-                </option>
-              ))}
-            </select>
-          )}
+          <select
+            className={compactFieldClass}
+            value={activeMonth}
+            onChange={(e) => setSelectedMonth(e.target.value)}
+          >
+            {sortedMonths.map((month) => (
+              <option key={month} value={month}>
+                {formatMonthLabel(month)}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
 

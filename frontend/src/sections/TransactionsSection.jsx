@@ -11,7 +11,6 @@ function TransactionsSection({
   transactions,
   filters,
   setFilters,
-  role,
   handleAddTxn,
   handleDeleteTxn,
   handleEditTxn,
@@ -58,14 +57,13 @@ function TransactionsSection({
           </p>
         </div>
 
-        {role === "admin" && (
           <button
             className="shrink-0 cursor-pointer whitespace-nowrap rounded-(--r-md) border-0 bg-(--accent) px-4.5 py-2.5 text-center text-sm font-semibold text-white max-[704px]:w-full"
             onClick={() => setIsModalOpen(true)}
           >
             Add transaction
           </button>
-        )}
+        {/* )} */}
 
         <div className="grid grid-cols-[minmax(0,1.5fr)_repeat(2,minmax(139px,0.8fr))] gap-3 max-[704px]:grid-cols-1">
           <input
@@ -121,7 +119,6 @@ function TransactionsSection({
           <span>Amount</span>
           <span>Type</span>
           <span>Date</span>
-          {role === "admin" && <span>Actions</span>}
         </div>
 
         {filteredTransactions.length === 0 ? (
@@ -133,7 +130,6 @@ function TransactionsSection({
             <TransactionItem
               key={txn._id}
               transaction={txn}
-              role={role}
               onEdit={(txn) => {
                 setEditingTxn(txn);
                 setIsModalOpen(true);

@@ -1,7 +1,7 @@
 import { api } from "./client";
 
-export function getTransactions() {
-  return api.get("/transactions");
+export function getTransactions(config = {}) {
+  return api.get("/transactions", config);
 }
 
 export function getTransactionById(transactionId) {

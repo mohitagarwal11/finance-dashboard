@@ -1,6 +1,6 @@
 import { formatCurrency, formatTransactionDate } from "../utils/formatters";
 
-function TransactionItem({ transaction, role, onEdit, onDelete }) {
+function TransactionItem({ transaction, onEdit, onDelete }) {
   const { title, amount, type, category, date } = transaction;
   const amountColor =
     type === "income" ? "text-(--green-strong)" : "text-(--danger-text)";
@@ -25,8 +25,6 @@ function TransactionItem({ transaction, role, onEdit, onDelete }) {
       <p className="text-[13px] text-(--muted) max-[1126px]:justify-self-start">
         {formatTransactionDate(date)}
       </p>
-
-      {role == "admin" && (
         <div className="flex justify-end gap-2 max-[704px]:justify-start">
           <button
             className="cursor-pointer rounded-(--r-sm) border border-(--border) bg-(--surface) px-3.5 py-1.75 text-[13px] font-medium text-(--green-strong) max-[704px]:flex-1"
@@ -41,7 +39,6 @@ function TransactionItem({ transaction, role, onEdit, onDelete }) {
             Delete
           </button>
         </div>
-      )}
     </div>
   );
 }

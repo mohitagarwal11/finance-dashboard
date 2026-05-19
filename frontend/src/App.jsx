@@ -5,7 +5,6 @@ import TransactionsSection from "./sections/TransactionsSection";
 import InsightsSection from "./sections/InsightsSection";
 import ChartsSection from "./sections/ChartsSection";
 import AuthPage from "./pages/AuthPage";
-import RoleSwitcher from "./components/RoleSwitcher";
 
 import { logoutUser } from "./api/auth";
 import { setAuthExpiredHandler } from "./api/client";
@@ -26,7 +25,6 @@ function App() {
   const [userData, setUserData] = useState(() => getStoredUser());
 
   const [transactions, setTransactions] = useState([]);
-  const [role, setRole] = useState("user");
 
   const [theme, setTheme] = useState(() => {
     return window.matchMedia("(prefers-color-scheme: dark)").matches
@@ -61,8 +59,8 @@ function App() {
     }
   };
 
-  const fetchTransactions = useCallback(async () => {
-    const response = await getTransactions();
+  const fetchTransactions = useCallback(async (signal) => {
+    const response = await getTransactions({ signal });
     setTransactions(response.data.data);
   }, []);
 
@@ -92,15 +90,29 @@ function App() {
       await fetchTransactions();
     } catch (error) {
       console.log(error);
+      throw error;
     }
   };
 
   useEffect(() => {
     if (!userData) return;
 
-    fetchTransactions().catch((error) => {
-      console.log(error);
-    });
+    const controller = new AbortController();
+
+    const load = async () => {
+      try {
+        await fetchTransactions(controller.signal);
+      } catch (error) {
+        // axios throws a CanceledError / ERR_CANCELED when aborted
+        if (error?.name === "CanceledError" || error?.code === "ERR_CANCELED")
+          return;
+        console.log(error);
+      }
+    };
+
+    void load();
+
+    return () => controller.abort();
   }, [fetchTransactions, userData]);
 
   useEffect(() => {
@@ -164,7 +176,6 @@ function App() {
             >
               {theme === "dark" ? "Light mode" : "Dark mode"}
             </button>
-            <RoleSwitcher role={role} setRole={setRole} />
             <button
               className="cursor-pointer rounded-(--r-md) border border-(--danger-border) bg-(--danger-light) px-3.5 py-2 text-sm font-semibold text-(--danger-text) hover:border-(--danger-text) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--danger-text)"
               type="button"
@@ -185,8 +196,6 @@ function App() {
             <InsightsSection
               transactions={transactions}
               expenseLimit={expenseLimit}
-              setExpenseLimit={setExpenseLimit}
-              role={role}
             />
           </aside>
         </div>
@@ -195,7 +204,6 @@ function App() {
           transactions={transactions}
           filters={filters}
           setFilters={setFilters}
-          role={role}
           handleAddTxn={handleAddTxn}
           handleDeleteTxn={handleDeleteTxn}
           handleEditTxn={handleEditTxn}
