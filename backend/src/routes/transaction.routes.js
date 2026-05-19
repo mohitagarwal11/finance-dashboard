@@ -5,6 +5,7 @@ import {
   createTransaction,
   updateTransaction,
   deleteTransaction,
+  deleteAllTransactions,
 } from "../controllers/transaction.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 
@@ -12,7 +13,11 @@ const router = Router();
 
 router.use(verifyJWT);
 
-router.route("/").get(getTransactions).post(createTransaction);
+router
+  .route("/")
+  .get(getTransactions)
+  .post(createTransaction)
+  .delete(deleteAllTransactions);
 
 router
   .route("/:id")

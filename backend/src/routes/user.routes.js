@@ -6,6 +6,7 @@ import {
   refreshAccessToken,
   getCurrentUser,
   updateUserSettings,
+  deleteCurrentUser,
 } from "../controllers/user.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 
@@ -19,7 +20,10 @@ router.route("/logout").post(verifyJWT, logoutUser);
 
 router.route("/refreshToken").post(refreshAccessToken);
 
-router.route("/me").get(verifyJWT, getCurrentUser);
+router
+  .route("/me")
+  .get(verifyJWT, getCurrentUser)
+  .delete(verifyJWT, deleteCurrentUser);
 
 router.route("/settings").patch(verifyJWT, updateUserSettings);
 

@@ -2,6 +2,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { User } from "../models/user.models.js";
+import { Transaction } from "../models/transaction.models.js";
 import jwt from "jsonwebtoken";
 
 const options = {
@@ -232,6 +233,22 @@ const updateUserSettings = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, { user }, "Settings updated successfully"));
 });
 
+const deleteCurrentUser = asyncHandler(async (req, res) => {
+  await Transaction.deleteMany({ user: req.user._id });
+
+  const user = await User.findByIdAndDelete(req.user._id);
+
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  return res
+    .status(200)
+    .clearCookie("accessToken", options)
+    .clearCookie("refreshToken", options)
+    .json(new ApiResponse(200, null, "Account deleted successfully"));
+});
+
 export {
   registerUser,
   loginUser,
@@ -239,4 +256,5 @@ export {
   refreshAccessToken,
   getCurrentUser,
   updateUserSettings,
+  deleteCurrentUser,
 };

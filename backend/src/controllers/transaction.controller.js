@@ -91,10 +91,27 @@ const deleteTransaction = asyncHandler(async (req, res) => {
   return res.status(200).json(new ApiResponse(200, txn, "Transaction deleted"));
 });
 
+const deleteAllTransactions = asyncHandler(async (req, res) => {
+  const result = await Transaction.deleteMany({
+    user: req.user._id,
+  });
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        { deletedCount: result.deletedCount },
+        "All transactions deleted",
+      ),
+    );
+});
+
 export {
   getTransactions,
   getTransactionById,
   createTransaction,
   updateTransaction,
   deleteTransaction,
+  deleteAllTransactions,
 };

@@ -23,3 +23,7 @@ export function getCurrentUser(config = {}) {
 export function updateUserSettings(settings) {
   return api.patch("/users/settings", settings);
 }
+
+export function deleteAccount() {
+  return api.delete("/users/me");
+}

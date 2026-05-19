@@ -19,3 +19,7 @@ export function updateTransaction(transactionId, transactionData) {
 export function deleteTransaction(transactionId) {
   return api.delete(`/transactions/${transactionId}`);
 }
+
+export function deleteAllTransactions() {
+  return api.delete("/transactions");
+}

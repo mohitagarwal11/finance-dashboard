@@ -222,6 +222,8 @@ function App() {
             <SettingsPage
               userData={userData}
               setUserData={setUserData}
+              transactions={transactions}
+              setTransactions={setTransactions}
               expenseLimit={expenseLimit}
               setExpenseLimit={setExpenseLimit}
             />
