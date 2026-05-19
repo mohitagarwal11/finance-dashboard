@@ -1,204 +1,223 @@
 # FinMo
 
-A responsive full-stack personal finance dashboard. FinMo helps users review income and expenses, inspect spending patterns through charts, track monthly limits, and manage transactions from an authenticated account.
+A responsive full-stack personal finance dashboard built with React, Vite, Express, and MongoDB. FinMo helps users review income and expenses, inspect spending patterns through interactive charts, track monthly budgets, and manage transactions from a secure authenticated account.
 
-## Deployed Build
+## Live Demo
 
-Live Demo: https://finmo-beryl.vercel.app/
+**Deployed Build:** https://finmo-beryl.vercel.app/
 
 ## Screenshots
 
-### Dashboard Overview(User)
+### Dashboard Overview
 
-![Dashboard overview for User](./assets/dashboard.png)
+![Dashboard overview](./assets/dashboard.png)
 
-### Transaction Management(Admin)
+### Transaction Management
 
-![Transaction Section for Admin](./assets/transactions.png)
+![Transaction Section](./assets/transactions.png)
 
-### Charts
+### Charts & Analytics
 
 ![Charts/Stats](./assets/charts.png)
 
 ## Overview
 
-FinMo is built with a React/Vite frontend and an Express/MongoDB backend. Users can register, log in, and manage their own transaction data. Authentication uses JWT access tokens sent as Bearer headers, with refresh-token rotation and HTTP-only cookies kept as a backend fallback for same-site deployments in future.
+FinMo is a full-stack personal finance management application that allows users to register, log in securely, and manage their transaction data. The application uses:
 
-The interface is organized around a few core workflows:
+- **Frontend:** React with Vite for fast development and production builds
+- **Backend:** Express.js REST API with MongoDB for data persistence
+- **Authentication:** JWT Bearer tokens with refresh-token rotation, HTTP-only cookies as fallback
+- **Security:** Password hashing with bcrypt, CORS-enabled for cross-origin requests
 
-- reviewing headline numbers like net balance, total income, and total expenses
-- exploring monthly trends and category-wise spending with charts
-- monitoring budget usage and monthly savings through quick insights
-- searching, filtering, adding, editing, and deleting transactions
-- switching between `user` and `admin` modes to change available dashboard actions
+### Core Workflows
+
+- **Summary Dashboard:** View headline metrics (net balance, total income, total expenses)
+- **Analytics:** Explore monthly trends and category-wise spending through interactive charts
+- **Budget Tracking:** Monitor monthly expense limits and savings goals
+- **Transaction Management:** Search, filter, create, edit, and delete transactions
 
 ## Features
 
-- User registration and login
-- JWT Bearer authentication with refresh-token rotation
-- MongoDB-backed transaction storage
-- Summary cards for net balance, total income, and total expenses
-- Interactive charts powered by Chart.js for:
-  - monthly income vs expense trends(Line Chart)
-  - expense distribution by category(Doughnut/Pie Chart)
-- Insights panel showing:
-  - month selector in User mode and configurable expense limit in Admin mode
-  - monthly expense tracker
-  - highest spending category for the selected month
-  - monthly net savings
-- Transaction list with filters for:
-  - search by title
-  - category
-  - transaction type
-- Admin-mode transaction management:
-  - add new transactions
-  - edit existing transactions
-  - delete transactions
-  - update the expense limit(Insights section)
-- User/Admin mode switcher for permission-aware UI behavior
-- Theme toggle with persisted light/dark preference
+### Authentication & User Management
+
+- User registration and login with email validation
+- JWT Bearer authentication with automatic token refresh
+- HTTP-only cookie fallback for same-site deployments
+- Secure password hashing with bcrypt (minimum 8 characters)
+- User profile and settings management
+- Account deletion capability
+
+### Transaction Management
+
+- Full CRUD operations for transactions (Create, Read, Update, Delete)
+- Transaction categorization:
+  - **Expense categories:** Food, Rent, Transportation, Utilities, Entertainment
+  - **Income categories:** Salary, Investment
+- Advanced filtering:
+  - Search by transaction title
+  - Filter by category
+  - Filter by transaction type (income/expense)
+- Date-based transaction organization
+
+### Dashboard Analytics
+
+- **Summary Cards:**
+  - Net balance (Income - Expenses)
+  - Total income across all transactions
+  - Total expenses across all transactions
+
+- **Interactive Charts:**
+  - Line chart showing monthly income vs. expense trends
+  - Doughnut/Pie chart displaying expense distribution by category
+
+- **Insights Panel:**
+  - Month selector for filtered analysis
+  - Configurable monthly expense limit
+  - Monthly expense tracking with visual indicators
+  - Highest spending category identification
+  - Monthly net savings calculation
+
+### User Experience
+
+- Light/dark theme toggle with persistent user preference
+- Responsive design optimized for desktop, tablet, and mobile
+- Pagination for transaction lists
+- Real-time UI updates on transaction changes
 
 ## Tech Stack
 
-| Layer      | Technology                                  |
-| ---------- | ------------------------------------------- |
-| Frontend   | React, Vite                                 |
-| Styling    | Tailwind CSS                                |
-| Charts     | Chart.js, `react-chartjs-2`                 |
-| API        | Express                                     |
-| Database   | MongoDB, Mongoose                           |
-| Auth       | JWT Bearer tokens, fallback cookies, bcrypt |
-| Client API | Axios                                       |
-
-## Getting Started
-
-### Prerequisites
-
-Make sure the following are installed:
-
-- Node.js `18+` recommended
-- npm
-- A MongoDB connection string
-
-### Installation
-
-Clone the repository and install dependencies in both apps:
-
-```bash
-git clone <your-repo-url>
-cd finance-dashboard
-
-cd backend
-npm install
-
-cd ../frontend
-npm install
-```
-
-### Backend Environment
-
-Create `backend/.env` with the required backend configuration:
-
-```env
-PORT=8000
-MONGODB_URL=<your-mongodb-connection-string>
-DB_NAME=finmo_db
-CORS_ORIGIN=http://localhost:5173
-ACCESS_TOKEN_SECRET=<your-access-token-secret>
-ACCESS_TOKEN_EXPIRY=1h
-REFRESH_TOKEN_SECRET=<your-refresh-token-secret>
-REFRESH_TOKEN_EXPIRY=30d
-```
-
-For deployment, set `CORS_ORIGIN` to the exact deployed frontend URL. The frontend sends auth through `Authorization` headers, while the backend still supports cookies as a fallback.
-
-### Running Locally
-
-Start the backend:
-
-```bash
-cd backend
-npm run dev
-```
-
-Start the frontend in a separate terminal:
-
-```bash
-cd frontend
-npm run dev
-```
-
-Vite will print a local URL, usually:
-
-```bash
-http://localhost:5173
-```
-
-The frontend dev server proxies `/api` requests to `http://localhost:8000`.
-
-## API Routes
-
-User routes are mounted under `/api/v1/users`:
-
-- `POST /register`
-- `POST /login`
-- `POST /logout`
-- `POST /refreshToken`
-
-Transaction routes are mounted under `/api/v1/transactions` and require authentication:
-
-- `GET /`
-- `POST /`
-- `GET /:id`
-- `PATCH /:id`
-- `DELETE /:id`
+| Layer              | Technology                             |
+| ------------------ | -------------------------------------- |
+| **Frontend**       | React 19, Vite 8                       |
+| **Styling**        | Tailwind CSS 4.2, Tailwind Vite Plugin |
+| **Charts**         | Chart.js 4.5, react-chartjs-2 5.3      |
+| **Routing**        | React Router DOM 6.30                  |
+| **Backend API**    | Express 5.2                            |
+| **Database**       | MongoDB 9.6, Mongoose 9.6              |
+| **Authentication** | JWT (jsonwebtoken 9.0), bcrypt 6.0     |
+| **HTTP Client**    | Axios 1.16                             |
+| **Middleware**     | CORS, cookie-parser                    |
+| **Dev Tools**      | ESLint, Nodemon                        |
 
 ## How It Works
 
-After login or registration, the backend returns access and refresh tokens in JSON and also sets HTTP-only cookies for fallback compatibility. The frontend stores the tokens locally, sends the access token in the `Authorization` header, and refreshes the list after create, update, and delete actions.
+### Authentication Flow
 
-The frontend keeps a small amount of UI state in the browser, including the selected theme, auth tokens, and the current logged-in user for rendering. Transaction records are stored in MongoDB and are associated with the authenticated user.
+1. **User Registration/Login:**
+   - User submits credentials to `/api/v1/users/register` or `/api/v1/users/login`
+   - Backend validates credentials and generates JWT access token (1h expiry) and refresh token (30d expiry)
+   - Tokens are returned in JSON response and set as HTTP-only cookies (for fallback)
 
-The `user` and `admin` roles are currently UI modes:
+2. **Token Storage:**
+   - Frontend stores tokens in `localStorage` via `tokenStore.js`
+   - User data (username, email, displayName, expenseLimit) is also stored locally
 
-- `user` can browse summaries, charts, insights, and transactions
-- `admin` can additionally add, edit, delete transactions, and update the monthly expense limit
+3. **Authenticated Requests:**
+   - All subsequent API requests include the access token in the `Authorization: Bearer <token>` header
+   - Backend middleware (`auth.middleware.js`) verifies the token before processing requests
+
+4. **Token Refresh:**
+   - When access token expires, frontend automatically requests a new one using the refresh token
+   - This is handled by the `setAuthExpiredHandler` in the API client
+   - New tokens are issued without requiring user to log in again
+
+### Data Flow
+
+1. **Transaction CRUD Operations:**
+   - All transactions are associated with the authenticated user via `user._id` MongoDB ObjectId
+   - When transactions are created/updated/deleted, the frontend automatically refreshes the list
+   - Transactions are sorted by date (newest first) in responses
+
+2. **UI State Management:**
+   - User authentication state is stored in React state and synced to localStorage
+   - Transaction list is maintained in component state and updated after each operation
+   - Theme preference (light/dark) persists via localStorage
+
+### Security Considerations
+
+- Passwords are hashed using bcrypt (10 salt rounds) before storage
+- JWT tokens are signed with strong secrets
+- HTTP-only cookies prevent XSS attacks from accessing tokens
+- CORS is configured to only accept requests from authorized frontend origin
+- Request body size is limited to 16KB to prevent DoS attacks
+- Authentication middleware protects sensitive endpoints
 
 ## Project Structure
 
 ```text
 finance-dashboard/
-|-- backend/
-|   |-- package.json
-|   \-- src/
-|       |-- app.js
-|       |-- server.js
-|       |-- controllers/
-|       |-- db/
-|       |-- middlewares/
-|       |-- models/
-|       |-- routes/
-|       |-- utils/
-|       \-- data/
-|-- frontend/
-|   |-- index.html
-|   |-- package.json
-|   |-- vite.config.js
-|   \-- src/
-|       |-- App.jsx
-|       |-- main.jsx
-|       |-- index.css
-|       |-- api/
-|       |-- components/
-|       |-- constants/
-|       |-- pages/
-|       |-- sections/
-|       \-- utils/
-\-- assets/
+├── README.md                          # Project documentation
+├── assets/                            # Project screenshots and images
+│   ├── dashboard.png
+│   ├── transactions.png
+│   └── charts.png
+│
+├── backend/                           # Express.js REST API
+│   ├── package.json                   # Backend dependencies
+│   └── src/
+│       ├── app.js                     # Express app setup, routes, middleware
+│       ├── server.js                  # Server startup and DB connection
+│       ├── controllers/               # Business logic for routes
+│       │   ├── user.controller.js    # Auth, registration, user management
+│       │   └── transaction.controller.js # Transaction CRUD operations
+│       ├── models/                    # Mongoose schemas
+│       │   ├── user.models.js        # User schema with JWT methods
+│       │   └── transaction.models.js # Transaction schema
+│       ├── routes/                    # API route definitions
+│       │   ├── user.routes.js        # User/auth endpoints
+│       │   └── transaction.routes.js # Transaction endpoints
+│       ├── middlewares/               # Custom middleware
+│       │   └── auth.middleware.js    # JWT verification middleware
+│       ├── db/                        # Database configuration
+│       │   └── index.js              # MongoDB connection
+│       └── utils/                     # Utility functions
+│           ├── ApiError.js           # Custom error class
+│           ├── ApiResponse.js        # Standardized response format
+│           └── asyncHandler.js       # Async error handling wrapper
+│
+├── frontend/                          # React + Vite application
+│   ├── package.json                   # Frontend dependencies
+│   ├── vite.config.js                 # Vite configuration
+│   ├── eslint.config.js               # ESLint rules
+│   ├── vercel.json                    # Vercel deployment config
+│   ├── index.html                     # HTML entry point
+│   ├── public/                        # Static assets
+│   └── src/
+│       ├── main.jsx                   # React app entry point
+│       ├── App.jsx                    # Main app component with routing
+│       ├── index.css                  # Global styles and theme variables
+│       ├── api/                       # API client and utilities
+│       │   ├── client.js             # Axios instance with interceptors
+│       │   ├── auth.js               # Authentication API calls
+│       │   ├── transactions.js       # Transaction API calls
+│       │   └── tokenStore.js         # LocalStorage token management
+│       ├── pages/                     # Page components (routes)
+│       │   ├── AuthPage.jsx          # Login/Registration page
+│       │   ├── DashboardPage.jsx     # Main dashboard with all sections
+│       │   └── SettingsPage.jsx      # User settings page
+│       ├── sections/                  # Dashboard sections (reusable layouts)
+│       │   ├── SummarySection.jsx    # Summary cards (balance, income, expenses)
+│       │   ├── ChartsSection.jsx     # Chart visualizations
+│       │   ├── InsightsSection.jsx   # Insights and budget tracking
+│       │   └── TransactionsSection.jsx # Transaction list and management
+│       ├── components/                # Reusable UI components
+│       │   ├── SummaryCard.jsx       # Individual summary card
+│       │   ├── TransactionItem.jsx   # Single transaction row
+│       │   ├── AddTransactionModal.jsx # Modal for adding transactions
+│       │   └── Pagination.jsx        # Pagination controls
+│       ├── constants/                 # Application constants
+│       │   └── categories.js         # Expense/income categories
+│       └── utils/                     # Utility functions
+│           ├── formatters.js         # Currency and date formatting
+│           └── reducers.js           # React reducers for data aggregation
+│
+└── OLD.stuff/                         # Legacy/archived code
 ```
 
 ## Notes
 
-- Currency values are formatted in Indian Rupees(`INR`).
-- The backend sets secure cookies, so production should be served over HTTPS.
-- Component styling is handled with Tailwind utility classes in JSX, while `index.css` keeps the Tailwind import and global theme variables.
+- **Currency Format:** All monetary values are formatted in Indian Rupees (₹/INR)
+- **Future Enhancements:**
+  - Transaction export (CSV/PDF)
+  - Data visualization improvements
+  - Mobile app using React Native
