@@ -1,6 +1,6 @@
 # FinMo
 
-A responsive full-stack personal finance dashboard built with React, Vite, Express, and MongoDB. FinMo helps users review income and expenses, inspect spending patterns through interactive charts, track monthly budgets, and manage transactions from a secure authenticated account.
+A responsive full-stack personal finance dashboard built with React, Vite, Express, MongoDB and Firebase Auth. FinMo helps users review income and expenses, inspect spending patterns through interactive charts, track monthly budgets, and manage transactions from a secure authenticated account.
 
 ## Live Demo
 
@@ -40,10 +40,10 @@ FinMo is a full-stack personal finance management application that allows users 
 
 ### Authentication & User Management
 
-- User registration and login with email validation
-- JWT Bearer authentication with automatic token refresh
-- HTTP-only cookie fallback for same-site deployments
-- Secure password hashing with bcrypt (minimum 8 characters)
+- Firebase email/password authentication with email verification
+- Google sign-in via Firebase OAuth
+- Backend Firebase ID token verification and JWT session tokens
+- Automatic access token refresh with HTTP-only cookie fallback
 - User profile and settings management
 - Account deletion capability
 
@@ -88,13 +88,13 @@ FinMo is a full-stack personal finance management application that allows users 
 
 | Layer              | Technology                             |
 | ------------------ | -------------------------------------- |
-| **Frontend**       | React 19, Vite 8                       |
-| **Styling**        | Tailwind CSS 4.2, Tailwind Vite Plugin |
-| **Charts**         | Chart.js 4.5, react-chartjs-2 5.3      |
-| **Routing**        | React Router DOM 6.30                  |
-| **Backend API**    | Express 5.2                            |
-| **Database**       | MongoDB 9.6, Mongoose 9.6              |
-| **Authentication** | JWT (jsonwebtoken 9.0), bcrypt 6.0     |
+| **Frontend**       | React, Vite                            |
+| **Styling**        | Tailwind CSS, Tailwind Vite Plugin     |
+| **Charts**         | Chart.js, react-chartjs-2              |
+| **Routing**        | React Router DOM                       |
+| **Backend API**    | Express                                |
+| **Database**       | MongoDB, Mongoose                      |
+| **Authentication** | Firebase Auth, JWT                     |
 | **HTTP Client**    | Axios 1.16                             |
 | **Middleware**     | CORS, cookie-parser                    |
 | **Dev Tools**      | ESLint, Nodemon                        |
@@ -103,23 +103,22 @@ FinMo is a full-stack personal finance management application that allows users 
 
 ### Authentication Flow
 
-1. **User Registration/Login:**
-   - User submits credentials to `/api/v1/users/register` or `/api/v1/users/login`
-   - Backend validates credentials and generates JWT access token (1h expiry) and refresh token (30d expiry)
-   - Tokens are returned in JSON response and set as HTTP-only cookies (for fallback)
+1. **Firebase Sign-In:**
+   - User signs in with Firebase email/password or Google
+   - Frontend receives a Firebase ID token
 
 2. **Token Storage:**
-   - Frontend stores tokens in `localStorage` via `tokenStore.js`
-   - User data (username, email, displayName, expenseLimit) is also stored locally
+   - Frontend sends the Firebase ID token to `/api/v1/auth/firebase`
+   - Backend verifies it and issues JWT access/refresh tokens
+   - Access token is stored in `localStorage` via `tokenStore.js`
 
 3. **Authenticated Requests:**
-   - All subsequent API requests include the access token in the `Authorization: Bearer <token>` header
+   - API requests include the access token in the `Authorization: Bearer <token>` header
    - Backend middleware (`auth.middleware.js`) verifies the token before processing requests
 
 4. **Token Refresh:**
-   - When access token expires, frontend automatically requests a new one using the refresh token
-   - This is handled by the `setAuthExpiredHandler` in the API client
-   - New tokens are issued without requiring user to log in again
+   - When access token expires, the API client calls `/api/v1/users/refreshToken`
+   - New tokens are issued without requiring the user to log in again
 
 ### Data Flow
 
@@ -135,7 +134,7 @@ FinMo is a full-stack personal finance management application that allows users 
 
 ### Security Considerations
 
-- Passwords are hashed using bcrypt (10 salt rounds) before storage
+- Firebase Auth manages credential storage and verification
 - JWT tokens are signed with strong secrets
 - HTTP-only cookies prevent XSS attacks from accessing tokens
 - CORS is configured to only accept requests from authorized frontend origin
@@ -157,23 +156,28 @@ finance-dashboard/
 │   └── src/
 │       ├── app.js                     # Express app setup, routes, middleware
 │       ├── server.js                  # Server startup and DB connection
+│       ├── config/
+│       │   └── firebaseAdmin.js       # Firebase Admin initialization
 │       ├── controllers/               # Business logic for routes
-│       │   ├── user.controller.js    # Auth, registration, user management
+│       │   ├── firebase.controller.js # Firebase auth exchange
+│       │   ├── user.controller.js     # User session + settings
 │       │   └── transaction.controller.js # Transaction CRUD operations
 │       ├── models/                    # Mongoose schemas
-│       │   ├── user.models.js        # User schema with JWT methods
-│       │   └── transaction.models.js # Transaction schema
+│       │   ├── user.models.js         # User schema with JWT methods
+│       │   └── transaction.models.js  # Transaction schema
 │       ├── routes/                    # API route definitions
-│       │   ├── user.routes.js        # User/auth endpoints
-│       │   └── transaction.routes.js # Transaction endpoints
+│       │   ├── firebase.routes.js     # Firebase auth endpoints
+│       │   ├── user.routes.js         # User endpoints
+│       │   └── transaction.routes.js  # Transaction endpoints
 │       ├── middlewares/               # Custom middleware
-│       │   └── auth.middleware.js    # JWT verification middleware
+│       │   ├── auth.middleware.js     # JWT verification middleware
+│       │   └── firebase.middleware.js # Firebase token verification
 │       ├── db/                        # Database configuration
-│       │   └── index.js              # MongoDB connection
+│       │   └── index.js               # MongoDB connection
 │       └── utils/                     # Utility functions
-│           ├── ApiError.js           # Custom error class
-│           ├── ApiResponse.js        # Standardized response format
-│           └── asyncHandler.js       # Async error handling wrapper
+│           ├── ApiError.js            # Custom error class
+│           ├── ApiResponse.js         # Standardized response format
+│           └── asyncHandler.js        # Async error handling wrapper
 │
 ├── frontend/                          # React + Vite application
 │   ├── package.json                   # Frontend dependencies
@@ -192,9 +196,9 @@ finance-dashboard/
 │       │   ├── transactions.js       # Transaction API calls
 │       │   └── tokenStore.js         # LocalStorage token management
 │       ├── pages/                     # Page components (routes)
-│       │   ├── AuthPage.jsx          # Login/Registration page
-│       │   ├── DashboardPage.jsx     # Main dashboard with all sections
-│       │   └── SettingsPage.jsx      # User settings page
+│       │   ├── AuthPage.jsx           # Login/Registration page
+│       │   ├── DashboardPage.jsx      # Main dashboard with all sections
+│       │   └── SettingsPage.jsx       # User settings page
 │       ├── sections/                  # Dashboard sections (reusable layouts)
 │       │   ├── SummarySection.jsx    # Summary cards (balance, income, expenses)
 │       │   ├── ChartsSection.jsx     # Chart visualizations
@@ -207,6 +211,9 @@ finance-dashboard/
 │       │   └── Pagination.jsx        # Pagination controls
 │       ├── constants/                 # Application constants
 │       │   └── categories.js         # Expense/income categories
+│       ├── contexts/                  # Auth + transactions state
+│       │   ├── AuthContext.jsx        # Auth provider
+│       │   └── TransactionsContext.jsx # Transactions provider
 │       └── utils/                     # Utility functions
 │           ├── formatters.js         # Currency and date formatting
 │           └── reducers.js           # React reducers for data aggregation
