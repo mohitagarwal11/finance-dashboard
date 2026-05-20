@@ -45,10 +45,19 @@ function AuthPage({ onAuthSuccess }) {
       setMessage("");
     }
 
-    setForm((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
+    if (e.target.name === "username") {
+      const usernameRegex =
+        /^(?=.{3,20}$)(?!.*[_.]{2})[a-z0-9](?:[a-z0-9._]*[a-z0-9])?$/;
+      if (!usernameRegex.test(e.target.value)) {
+        setMessage(
+          "Username must be 3-20 characters long and may contain lowercase letters, numbers, dots and underscores only. Dots and underscores cannot appear at the beginning or end.",
+        );
+      } else {
+        setMessage("");
+      }
+    }
+    
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleSubmit = async (e) => {
