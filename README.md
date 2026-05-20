@@ -86,18 +86,18 @@ FinMo is a full-stack personal finance management application that allows users 
 
 ## Tech Stack
 
-| Layer              | Technology                             |
-| ------------------ | -------------------------------------- |
-| **Frontend**       | React, Vite                            |
-| **Styling**        | Tailwind CSS, Tailwind Vite Plugin     |
-| **Charts**         | Chart.js, react-chartjs-2              |
-| **Routing**        | React Router DOM                       |
-| **Backend API**    | Express                                |
-| **Database**       | MongoDB, Mongoose                      |
-| **Authentication** | Firebase Auth, JWT                     |
-| **HTTP Client**    | Axios 1.16                             |
-| **Middleware**     | CORS, cookie-parser                    |
-| **Dev Tools**      | ESLint, Nodemon                        |
+| Layer              | Technology                         |
+| ------------------ | ---------------------------------- |
+| **Frontend**       | React, Vite                        |
+| **Styling**        | Tailwind CSS, Tailwind Vite Plugin |
+| **Charts**         | Chart.js, react-chartjs-2          |
+| **Routing**        | React Router DOM                   |
+| **Backend API**    | Express                            |
+| **Database**       | MongoDB, Mongoose                  |
+| **Authentication** | Firebase Auth, JWT                 |
+| **HTTP Client**    | Axios 1.16                         |
+| **Middleware**     | CORS, cookie-parser                |
+| **Dev Tools**      | ESLint, Nodemon                    |
 
 ## How It Works
 
