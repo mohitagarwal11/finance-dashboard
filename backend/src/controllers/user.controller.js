@@ -5,10 +5,11 @@ import { User } from "../models/user.models.js";
 import { Transaction } from "../models/transaction.models.js";
 import jwt from "jsonwebtoken";
 
+const isProduction = process.env.NODE_ENV === "production";
 const options = {
   httpOnly: true,
-  secure: true,
-  sameSite: "none",
+  secure: isProduction,
+  sameSite: isProduction ? "none" : "lax",
 };
 
 const generateAccessAndRefreshToken = async (user) => {
@@ -28,116 +29,27 @@ const generateAccessAndRefreshToken = async (user) => {
   }
 };
 
-const registerUser = asyncHandler(async (req, res) => {
-  const { username, email, password } = req.body;
-
-  // check if user already exists
-  const existingUser = await User.findOne({
-    $or: [{ email }, { username }],
-  });
-
-  if (existingUser) {
-    if (existingUser.username === username) {
-      throw new ApiError(409, "User with username already exists");
-    }
-
-    if (existingUser.email === email) {
-      throw new ApiError(409, "User with email already exists");
-    }
-  }
-
-  // create user in db
-  const user = await User.create({
-    username,
-    email,
-    password,
-  });
-
-  // finds the created user and then removes password and refreshtoken from it
-  const createdUser = await User.findById(user._id).select(
-    "-password -refreshToken",
-  );
-
-  if (!createdUser) {
-    throw new ApiError(500, "Failed to create user");
-  }
-
-  const { accessToken, refreshToken } =
-    await generateAccessAndRefreshToken(user);
-
-  return res
-    .status(201)
-    .cookie("accessToken", accessToken, options)
-    .cookie("refreshToken", refreshToken, options)
-    .json(
-      new ApiResponse(
-        201,
-        { user: createdUser, accessToken, refreshToken },
-        "User registered successfully",
-      ),
-    );
-});
-
-const loginUser = asyncHandler(async (req, res) => {
-  const { username, password } = req.body;
-
-  // check is user exists
-  const existingUser = await User.findOne({ username });
-
-  if (!existingUser) {
-    throw new ApiError(404, "User with given username does not exist");
-  }
-
-  // check if password is valid
-  const isPasswordValid = await existingUser.isPasswordCorrect(password);
-
-  if (!isPasswordValid) {
-    throw new ApiError(401, "Incorrect password");
-  }
-
-  // get access token and refresh token
-  const { accessToken, refreshToken } =
-    await generateAccessAndRefreshToken(existingUser);
-
-  // finds the user and then removes password and refreshtoken from it
-  const user = await User.findById(existingUser._id).select(
-    "-password -refreshToken",
-  );
-
-  return res
-    .status(200)
-    .cookie("accessToken", accessToken, options)
-    .cookie("refreshToken", refreshToken, options)
-    .json(
-      new ApiResponse(
-        200,
-        {
-          user,
-          accessToken,
-          refreshToken,
-        },
-        "User logged in successfully",
-      ),
-    );
-});
-
-const logoutUser = asyncHandler(async (req, res) => {
-  // removes the refresh token from db
-  await User.findByIdAndUpdate(req.user._id, {
-    $set: {
-      refreshToken: undefined,
+export const logoutUser = asyncHandler(async (req, res) => {
+  await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      $unset: {
+        refreshToken: 1,
+      },
     },
-  });
+    {
+      returnDocument: "after",
+    },
+  );
 
-  // clears the access token and refresh token cookies from frontend and sends response
   return res
     .status(200)
     .clearCookie("accessToken", options)
     .clearCookie("refreshToken", options)
-    .json(new ApiResponse(200, "User logged out successfully"));
+    .json(new ApiResponse(200, null, "User logged out successfully"));
 });
 
-const refreshAccessToken = asyncHandler(async (req, res) => {
+export const refreshAccessToken = asyncHandler(async (req, res) => {
   const incomingRefreshToken =
     req.body.refreshToken || req.cookies?.refreshToken;
 
@@ -145,10 +57,16 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     throw new ApiError(401, "Unauthorized request");
   }
 
-  const decodedToken = jwt.verify(
-    incomingRefreshToken,
-    process.env.REFRESH_TOKEN_SECRET,
-  );
+  let decodedToken;
+
+  try {
+    decodedToken = jwt.verify(
+      incomingRefreshToken,
+      process.env.REFRESH_TOKEN_SECRET,
+    );
+  } catch (error) {
+    throw new ApiError(401, "Invalid refresh token");
+  }
 
   const user = await User.findById(decodedToken?._id);
 
@@ -179,7 +97,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     );
 });
 
-const getCurrentUser = asyncHandler(async (req, res) => {
+export const getCurrentUser = asyncHandler(async (req, res) => {
   return res
     .status(200)
     .json(
@@ -187,7 +105,7 @@ const getCurrentUser = asyncHandler(async (req, res) => {
     );
 });
 
-const updateUserSettings = asyncHandler(async (req, res) => {
+export const updateUserSettings = asyncHandler(async (req, res) => {
   const { displayName, expenseLimit } = req.body;
   const updates = {};
 
@@ -233,7 +151,7 @@ const updateUserSettings = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, { user }, "Settings updated successfully"));
 });
 
-const deleteCurrentUser = asyncHandler(async (req, res) => {
+export const deleteCurrentUser = asyncHandler(async (req, res) => {
   await Transaction.deleteMany({ user: req.user._id });
 
   const user = await User.findByIdAndDelete(req.user._id);
@@ -248,13 +166,3 @@ const deleteCurrentUser = asyncHandler(async (req, res) => {
     .clearCookie("refreshToken", options)
     .json(new ApiResponse(200, null, "Account deleted successfully"));
 });
-
-export {
-  registerUser,
-  loginUser,
-  logoutUser,
-  refreshAccessToken,
-  getCurrentUser,
-  updateUserSettings,
-  deleteCurrentUser,
-};

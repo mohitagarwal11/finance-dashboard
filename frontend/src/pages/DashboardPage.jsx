@@ -1,9 +1,11 @@
+import { Suspense, lazy } from "react";
 import { Link } from "react-router-dom";
 
 import SummarySection from "../sections/SummarySection";
-import ChartsSection from "../sections/ChartsSection";
 import InsightsSection from "../sections/InsightsSection";
 import TransactionsSection from "../sections/TransactionsSection";
+
+const ChartsSection = lazy(() => import("../sections/ChartsSection"));
 
 function getInitials(name) {
   if (!name) return "U";
@@ -24,7 +26,6 @@ function DashboardPage({
   handleEditTxn,
   handleDeleteTxn,
   expenseLimit,
-  setExpenseLimit,
   handleLogout,
 }) {
   const displayName =
@@ -80,14 +81,21 @@ function DashboardPage({
         <div className="grid grid-cols-[minmax(0,1fr)_347px] items-stretch gap-3.5 max-[1188px]:grid-cols-1">
           <div className="flex min-w-0 flex-col gap-3.5">
             <SummarySection transactions={transactions} />
-            <ChartsSection transactions={transactions} />
+            <Suspense
+              fallback={
+                <section className="flex min-w-0 flex-col gap-4 rounded-(--r-lg) border border-(--border) bg-(--surface) p-5 max-[704px]:p-4">
+                  <p className="text-sm text-(--muted)">Loading charts...</p>
+                </section>
+              }
+            >
+              <ChartsSection transactions={transactions} />
+            </Suspense>
           </div>
 
           <aside className="flex min-w-0 flex-col">
             <InsightsSection
               transactions={transactions}
               expenseLimit={expenseLimit}
-              setExpenseLimit={setExpenseLimit}
             />
           </aside>
         </div>

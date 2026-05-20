@@ -11,18 +11,18 @@ import { verifyJWT } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
-router.use(verifyJWT);
+// router.use(verifyJWT);
 
 router
   .route("/")
-  .get(getTransactions)
-  .post(createTransaction)
-  .delete(deleteAllTransactions);
+  .get(verifyJWT, getTransactions)
+  .post(verifyJWT, createTransaction)
+  .delete(verifyJWT, deleteAllTransactions);
 
 router
   .route("/:id")
-  .get(getTransactionById)
-  .patch(updateTransaction)
-  .delete(deleteTransaction);
+  .get(verifyJWT, getTransactionById)
+  .patch(verifyJWT, updateTransaction)
+  .delete(verifyJWT, deleteTransaction);
 
 export default router;

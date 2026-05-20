@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { deleteAccount, updateUserSettings } from "../api/auth";
 import { deleteAllTransactions } from "../api/transactions";
-import { clearAuthStorage, setStoredUser } from "../api/tokenStore";
 import { formatCurrency } from "../utils/formatters";
 
 const fieldClass =
@@ -145,11 +144,11 @@ function ConfirmDestructiveModal({ action, isWorking, onClose, onConfirm }) {
 
 function SettingsPage({
   userData,
-  setUserData,
+  onUserUpdate,
   transactions = [],
   setTransactions,
   expenseLimit,
-  setExpenseLimit,
+  onAccountDeleted,
 }) {
   const navigate = useNavigate();
   const [displayName, setDisplayName] = useState(getDisplayName(userData));
@@ -196,9 +195,7 @@ function SettingsPage({
         expenseLimit: parsedLimit,
       };
 
-      setExpenseLimit(Number(updatedUser.expenseLimit));
-      setStoredUser(updatedUser);
-      if (typeof setUserData === "function") setUserData(updatedUser);
+      if (typeof onUserUpdate === "function") onUserUpdate(updatedUser);
 
       setMessage("Settings saved.");
     } catch (error) {
@@ -224,9 +221,10 @@ function SettingsPage({
       }
 
       await deleteAccount();
-      clearAuthStorage();
       if (typeof setTransactions === "function") setTransactions([]);
-      if (typeof setUserData === "function") setUserData(null);
+      if (typeof onAccountDeleted === "function") {
+        await onAccountDeleted();
+      }
       navigate("/", { replace: true });
     } catch (error) {
       setMessage(

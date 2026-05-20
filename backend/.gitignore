@@ -5,3 +5,6 @@ build
 *.log
 *.lock
 .DS_Store
+
+
+firebaseAccountSecrets.json

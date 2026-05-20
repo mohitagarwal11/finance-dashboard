@@ -1,19 +1,23 @@
 import { api } from "./client";
 
-export function registerUser(userData) {
-  return api.post("/users/register", userData);
-}
-
-export function loginUser(credentials) {
-  return api.post("/users/login", credentials);
+export function authUser(firebaseToken) {
+  return api.post(
+    "/auth/firebase",
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${firebaseToken}`,
+      },
+    },
+  );
 }
 
 export function logoutUser() {
   return api.post("/users/logout");
 }
 
-export function refreshToken(refreshTokenValue) {
-  return api.post("/users/refreshToken", { refreshToken: refreshTokenValue });
+export function refreshToken() {
+  return api.post("/users/refreshToken");
 }
 
 export function getCurrentUser(config = {}) {

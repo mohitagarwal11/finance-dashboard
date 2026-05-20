@@ -1,7 +1,8 @@
-import { useState } from "react";
-import { loginUser, registerUser } from "../api/auth";
+import { useEffect, useState } from "react";
 import dashboardPreview from "../../../assets/dashboard.png";
 import transactionsPreview from "../../../assets/transactions.png";
+
+import { useAuth } from "../hooks/useAuth.js";
 
 const features = [
   {
@@ -28,15 +29,51 @@ const highlights = [
   "Transaction history",
 ];
 
-function AuthPage({ onAuthSuccess }) {
+function AuthPage() {
+  const {
+    loginWithEmail: login,
+    signupWithEmail: signup,
+    error: authError,
+    isLoading,
+  } = useAuth();
   const [mode, setMode] = useState("login");
   const [showPassword, setShowPassword] = useState(false);
   const [form, setForm] = useState({
-    username: "",
     email: "",
     password: "",
   });
   const [message, setMessage] = useState("");
+
+  const getAuthErrorMessage = (error, currentMode) => {
+    const code = error?.code;
+
+    if (code) {
+      switch (code) {
+        case "auth/user-not-found":
+          return "No account found for this email. Create one first.";
+        case "auth/wrong-password":
+          return "Incorrect password. Try again or reset your password.";
+        case "auth/invalid-credential":
+          return "Email or password is incorrect.";
+        case "auth/invalid-email":
+          return "Enter a valid email address.";
+        case "auth/user-disabled":
+          return "This account has been disabled. Contact support.";
+        case "auth/too-many-requests":
+          return "Too many attempts. Try again in a few minutes.";
+        case "auth/email-already-in-use":
+          return "An account already exists with this email.";
+        case "auth/weak-password":
+          return "Password is too weak. Use at least 8 characters.";
+        default:
+          return currentMode === "register"
+            ? "Could not create the account. Please try again."
+            : "Could not log in. Please try again.";
+      }
+    }
+
+    return error?.response?.data?.message || "Something went wrong!";
+  };
 
   const handleChange = (e) => {
     if (e.target.name === "password" && e.target.value.length < 8) {
@@ -45,20 +82,13 @@ function AuthPage({ onAuthSuccess }) {
       setMessage("");
     }
 
-    if (e.target.name === "username") {
-      const usernameRegex =
-        /^(?=.{3,20}$)(?!.*[_.]{2})[a-z0-9](?:[a-z0-9._]*[a-z0-9])?$/;
-      if (!usernameRegex.test(e.target.value)) {
-        setMessage(
-          "Username must be 3-20 characters long and may contain lowercase letters, numbers, dots and underscores only. Dots and underscores cannot appear at the beginning or end.",
-        );
-      } else {
-        setMessage("");
-      }
-    }
-    
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
+
+  useEffect(() => {
+    if (!authError) return;
+    setMessage(getAuthErrorMessage(authError, mode));
+  }, [authError, mode]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -66,16 +96,12 @@ function AuthPage({ onAuthSuccess }) {
     try {
       const trimmedForm = {
         ...form,
-        username: form.username.trim(),
         email: form.email.trim(),
         password: form.password.trim(),
       };
 
       if (
-        [trimmedForm.username, trimmedForm.password].some(
-          (field) => field === "",
-        ) ||
-        (mode === "register" && trimmedForm.email === "")
+        [trimmedForm.password, trimmedForm.email].some((field) => field === "")
       ) {
         setMessage("All fields are required");
         return;
@@ -88,22 +114,19 @@ function AuthPage({ onAuthSuccess }) {
         return;
       }
 
-      const payload =
-        mode === "register"
-          ? trimmedForm
-          : {
-              username: trimmedForm.username,
-              password: trimmedForm.password,
-            };
+      // console.log(trimmedForm.email, trimmedForm.password);
 
-      const response =
-        mode === "register"
-          ? await registerUser(payload)
-          : await loginUser(payload);
-
-      onAuthSuccess(response.data);
+      if (mode === "register") {
+        await signup(trimmedForm.email, trimmedForm.password);
+        setMessage(
+          "Account created successfully! Please verify your email before logging in.",
+        );
+      } else {
+        await login(trimmedForm.email, trimmedForm.password);
+        setMessage("");
+      }
     } catch (error) {
-      setMessage(error.response?.data?.message || "Something went wrong!");
+      setMessage(getAuthErrorMessage(error, mode));
     }
   };
 
@@ -239,33 +262,17 @@ function AuthPage({ onAuthSuccess }) {
             </div>
 
             <label className="mb-2 block text-sm font-bold text-(--text) max-[380px]:mb-1.5">
-              Username
+              Email
             </label>
             <input
-              name="username"
-              placeholder="Enter your username"
-              value={form.username}
+              name="email"
+              type="email"
+              placeholder="you@example.com"
+              value={form.email}
               onChange={handleChange}
-              autoComplete="username"
+              autoComplete="email"
               className="mb-4 w-full min-w-0 rounded-(--r-md) border border-(--border) bg-(--bg) px-4 py-3 text-(--text) outline-none focus:border-(--border-focus) max-[380px]:mb-3 max-[380px]:py-2.5"
             />
-
-            {!isLogin && (
-              <>
-                <label className="mb-2 block text-sm font-bold text-(--text) max-[380px]:mb-1.5">
-                  Email address
-                </label>
-                <input
-                  name="email"
-                  type="email"
-                  placeholder="you@example.com"
-                  value={form.email}
-                  onChange={handleChange}
-                  autoComplete="email"
-                  className="mb-4 w-full min-w-0 rounded-(--r-md) border border-(--border) bg-(--bg) px-4 py-3 text-(--text) outline-none focus:border-(--border-focus) max-[380px]:mb-3 max-[380px]:py-2.5"
-                />
-              </>
-            )}
 
             <label className="mb-2 block text-sm font-bold text-(--text) max-[380px]:mb-1.5">
               Password
@@ -274,7 +281,7 @@ function AuthPage({ onAuthSuccess }) {
               <input
                 name="password"
                 type={showPassword ? "text" : "password"}
-                placeholder="Enter your password"
+                placeholder="Min 8 characters"
                 value={form.password}
                 onChange={handleChange}
                 autoComplete={isLogin ? "current-password" : "new-password"}
@@ -291,9 +298,14 @@ function AuthPage({ onAuthSuccess }) {
 
             <button
               type="submit"
+              disabled={isLoading}
               className="w-full rounded-(--r-md) bg-(--accent) px-4 py-3.5 font-bold text-white shadow-[0_14px_30px_rgba(22,163,74,0.24)] hover:brightness-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent) max-[380px]:py-3"
             >
-              {isLogin ? "Log in" : "Create account"}
+              {isLoading
+                ? "Signing in..."
+                : isLogin
+                  ? "Log in"
+                  : "Create account"}
             </button>
 
             {message && (

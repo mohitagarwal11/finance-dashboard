@@ -79,10 +79,15 @@ const updateTransaction = asyncHandler(async (req, res) => {
 
 // gets txn id from frontend and deletes the txn
 const deleteTransaction = asyncHandler(async (req, res) => {
-  const txn = await Transaction.findOneAndDelete({
-    _id: req.params.id,
-    user: req.user._id,
-  });
+  const txn = await Transaction.findOneAndDelete(
+    {
+      _id: req.params.id,
+      user: req.user._id,
+    },
+    {
+      returnDocument: "after",
+    },
+  );
 
   if (!txn) {
     throw new ApiError(404, "Transaction not found or deletion failed");
