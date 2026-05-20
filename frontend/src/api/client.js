@@ -1,13 +1,9 @@
 import axios from "axios";
-import {
-  clearAuthStorage,
-  getAccessToken,
-  getRefreshToken,
-  setAuthTokens,
-} from "./tokenStore";
+import { clearAuthStorage, getAccessToken, setAuthTokens } from "./tokenStore";
 
 export const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
+  withCredentials: true,
 });
 
 let refreshRequest = null;
@@ -20,7 +16,7 @@ export function setAuthExpiredHandler(handler) {
 api.interceptors.request.use((config) => {
   const accessToken = getAccessToken();
 
-  if (accessToken) {
+  if (accessToken && !config.headers?.Authorization) {
     config.headers ??= {};
     config.headers.Authorization = `Bearer ${accessToken}`;
   }
@@ -44,22 +40,14 @@ api.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    const refreshToken = getRefreshToken();
-
-    if (!refreshToken) {
-      clearAuthStorage();
-      handleAuthExpired();
-      return Promise.reject(error);
-    }
-
     originalRequest._retry = true;
 
     try {
-      refreshRequest ??= api.post("/users/refreshToken", { refreshToken });
+      refreshRequest ??= api.post("/users/refreshToken");
       const response = await refreshRequest;
       const tokens = response.data?.data;
 
-      if (!tokens?.accessToken || !tokens?.refreshToken) {
+      if (!tokens?.accessToken) {
         throw new Error("Refresh response did not include auth tokens");
       }
 
