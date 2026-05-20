@@ -20,13 +20,18 @@ app.use(express.urlencoded({ limit: "16kb" }));
 // using cookie parser middleware to parse the cookies from the request header and make it available in req.cookies
 app.use(cookieParser());
 
-// routes imports
+// ROUTES IMPORT
 import userRouter from "./routes/user.routes.js";
 import transactionRouter from "./routes/transaction.routes.js";
+import firebaseRouter from "./routes/firebase.routes.js";
 
-// routes declarations
+// ROUTES DECLARATION
+// this is used to for jwt routes like user info, settings related routes and refreshAccessToken
 app.use("/api/v1/users", userRouter);
+// this is used for all transaction related routes
 app.use("/api/v1/transactions", transactionRouter);
+// this is used for all firebase related routes like login, logout
+app.use("/api/v1/auth", firebaseRouter);
 
 // error handling middleware to catch any errors that might occur in the request handlers
 app.use((err, req, res, next) => {
