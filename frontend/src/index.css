@@ -47,17 +47,17 @@
   /* Soft translucent borders for subtle separation */
   --border: rgba(255, 255, 255, 0.06);
   --border-strong: rgba(255, 255, 255, 0.09);
-  --border-focus: #7c5cff;
+  --border-focus: #16a34a;
 
   /* Light, slightly warm text to reduce glare */
   --text: #e6eef8;
   --muted: #9aa8bd;
   --text-secondary: #b6c6d8;
 
-  /* Modern accents: primary violet and secondary teal */
-  --accent: #7c5cff;
-  --accent-2: #2dd4bf;
-  --green-strong: #34d399;
+  /* Keep the same green accent system in dark mode */
+  --accent: #16a34a;
+  --accent-2: #22c55e;
+  --green-strong: #16a34a;
 
   /* Danger tones kept but tuned for the dark background */
   --danger-text: #fb7185;
