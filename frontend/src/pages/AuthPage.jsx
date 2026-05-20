@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import dashboardPreview from "../../../assets/dashboard.png";
 import transactionsPreview from "../../../assets/transactions.png";
 
@@ -33,6 +33,7 @@ function AuthPage() {
   const {
     loginWithEmail: login,
     signupWithEmail: signup,
+    error: authError,
     isLoading,
   } = useAuth();
   const [mode, setMode] = useState("login");
@@ -43,6 +44,37 @@ function AuthPage() {
   });
   const [message, setMessage] = useState("");
 
+  const getAuthErrorMessage = (error, currentMode) => {
+    const code = error?.code;
+
+    if (code) {
+      switch (code) {
+        case "auth/user-not-found":
+          return "No account found for this email. Create one first.";
+        case "auth/wrong-password":
+          return "Incorrect password. Try again or reset your password.";
+        case "auth/invalid-credential":
+          return "Email or password is incorrect.";
+        case "auth/invalid-email":
+          return "Enter a valid email address.";
+        case "auth/user-disabled":
+          return "This account has been disabled. Contact support.";
+        case "auth/too-many-requests":
+          return "Too many attempts. Try again in a few minutes.";
+        case "auth/email-already-in-use":
+          return "An account already exists with this email.";
+        case "auth/weak-password":
+          return "Password is too weak. Use at least 8 characters.";
+        default:
+          return currentMode === "register"
+            ? "Could not create the account. Please try again."
+            : "Could not log in. Please try again.";
+      }
+    }
+
+    return error?.response?.data?.message || "Something went wrong!";
+  };
+
   const handleChange = (e) => {
     if (e.target.name === "password" && e.target.value.length < 8) {
       setMessage("Password must be at least 8 characters long");
@@ -52,6 +84,11 @@ function AuthPage() {
 
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
+
+  useEffect(() => {
+    if (!authError) return;
+    setMessage(getAuthErrorMessage(authError, mode));
+  }, [authError, mode]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -89,7 +126,7 @@ function AuthPage() {
         setMessage("");
       }
     } catch (error) {
-      setMessage(error.response?.data?.message || "Something went wrong!");
+      setMessage(getAuthErrorMessage(error, mode));
     }
   };
 
