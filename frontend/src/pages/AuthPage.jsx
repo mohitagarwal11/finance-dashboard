@@ -4,24 +4,6 @@ import transactionsPreview from "../../../assets/transactions.png";
 
 import { useAuth } from "../hooks/useAuth.js";
 
-const features = [
-  {
-    label: "Track cashflow",
-    copy: "See income, spending, and savings without jumping between screens.",
-    tone: "bg-emerald-500",
-  },
-  {
-    label: "Spot patterns",
-    copy: "Monthly charts make recurring habits and budget pressure easier to read.",
-    tone: "bg-blue-500",
-  },
-  {
-    label: "Act faster",
-    copy: "Filter, edit, and review transactions from one focused workspace.",
-    tone: "bg-amber-500",
-  },
-];
-
 const highlights = [
   "Personal dashboard",
   "Category insights",
@@ -140,12 +122,12 @@ function AuthPage() {
           <div className="relative z-10">
             <div className="mb-10 flex items-center justify-between gap-4 max-[1080px]:mb-8 max-[640px]:hidden">
               <div className="flex items-center gap-3">
-                <div className="flex h-11 w-11 shrink-0 items-end justify-center gap-1 rounded-(--r-md) bg-(--accent) p-2.5 text-white shadow-[0_12px_24px_rgba(22,163,74,0.24)]">
-                  <span className="h-3 w-1.5 rounded-full bg-white/80" />
-                  <span className="h-5 w-1.5 rounded-full bg-white" />
-                  <span className="h-7 w-1.5 rounded-full bg-white/90" />
+                <div className="flex h-10 w-10 shrink-0 items-end justify-center gap-1 rounded-(--r-md) bg-(--accent) p-2 text-white shadow-[0_12px_24px_rgba(22,163,74,0.24)]">
+                  <span className="h-2.5 w-1.5 rounded-full bg-white/80" />
+                  <span className="h-4 w-1.5 rounded-full bg-white" />
+                  <span className="h-6 w-1.5 rounded-full bg-white/90" />
                 </div>
-                <p className="text-2xl font-bold text-(--text) max-[360px]:text-xl">
+                <p className="text-4xl font-bold text-(--text) max-[360px]:text-xl">
                   FinMo
                 </p>
               </div>
@@ -153,10 +135,7 @@ function AuthPage() {
 
             <div className="grid items-start gap-8 min-[1280px]:grid-cols-[minmax(300px,0.9fr)_minmax(340px,1fr)] max-[1080px]:grid-cols-[minmax(0,1fr)_minmax(280px,420px)] max-[760px]:grid-cols-1 max-[640px]:gap-0">
               <div className="min-w-0">
-                <p className="mb-4 w-fit max-w-full rounded-full border border-(--border) bg-(--surface)/80 px-3 py-1.5 text-xs font-bold text-(--accent) max-[640px]:mb-3">
-                  Smart finance, better decisions
-                </p>
-                <h1 className="max-w-125 text-[clamp(2rem,3.5vw,3rem)] font-bold leading-[1.03] text-(--text) max-[640px]:text-[1.7rem] max-[420px]:text-[1.55rem]">
+                <h1 className="max-w-125 text-[clamp(1.8rem,3.5vw,2.2rem)] font-bold leading-[1.03] text-(--text) max-[640px]:text-[1.7rem] max-[420px]:text-[1.55rem]">
                   All your finances, one smart dashboard
                 </h1>
                 <p className="mt-5 max-w-132 text-[1rem] leading-8 text-(--muted) max-[640px]:mt-3 max-[640px]:text-sm max-[640px]:leading-6">
@@ -177,7 +156,7 @@ function AuthPage() {
                 </div>
               </div>
 
-              <div className="relative min-w-0 pt-2 max-[760px]:hidden min-[1280px]:min-h-112">
+              <div className="relative min-w-0 max-[760px]:hidden min-[1280px]:min-h-112">
                 <div className="ml-auto w-full max-w-142 overflow-hidden rounded-(--r-xl) border border-(--border-strong) bg-(--surface) shadow-[0_28px_70px_rgba(15,23,42,0.18)] max-[1080px]:rounded-(--r-lg)">
                   <img
                     src={dashboardPreview}
@@ -195,25 +174,6 @@ function AuthPage() {
                 </div>
               </div>
             </div>
-          </div>
-
-          <div className="relative z-10 grid gap-4 min-[720px]:grid-cols-3 max-[640px]:grid-cols-1 max-[520px]:gap-3">
-            {features.map((feature) => (
-              <article
-                key={feature.label}
-                className="rounded-(--r-lg) border border-(--border) bg-(--surface)/86 p-5 shadow-sm backdrop-blur max-[640px]:p-4"
-              >
-                <span
-                  className={`mb-4 block h-9 w-9 rounded-(--r-sm) ${feature.tone} max-[640px]:mb-3 max-[640px]:h-7 max-[640px]:w-7`}
-                />
-                <h2 className="text-base font-bold text-(--text)">
-                  {feature.label}
-                </h2>
-                <p className="mt-2 text-sm leading-6 text-(--muted) max-[640px]:leading-5">
-                  {feature.copy}
-                </p>
-              </article>
-            ))}
           </div>
         </section>
 
